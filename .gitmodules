@@ -1,0 +1,3 @@
+[submodule "former/Dynamical-Regimes-of-Diffusion-Models"]
+	path = former/Dynamical-Regimes-of-Diffusion-Models
+	url = https://github.com/tbonnair/Dynamical-Regimes-of-Diffusion-Models.git
