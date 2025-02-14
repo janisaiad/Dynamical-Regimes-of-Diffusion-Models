@@ -4,6 +4,7 @@ Version: 0.1.0
 Summary: Diffusion models for EAP2
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
+Requires-Dist: jupytext>=1.16.7
 Requires-Dist: numpy>=2.0.2
 Requires-Dist: pytest>=8.3.4
 Requires-Dist: torch>=2.5.1
