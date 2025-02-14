@@ -50,6 +50,10 @@ def test_dtype_characteristics(device):
         assert x.dtype == dtype
         assert x.device.type == device.type
 
+def print_device():
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"\nUsing device: {device}")
 
 if __name__ == "__main__":
     pytest.main()
+    print_device()
