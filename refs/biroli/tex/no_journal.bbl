@@ -1,0 +1,262 @@
+\begin{thebibliography}{51}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Albergo et~al.(2023)Albergo, Boffi, and Vanden-Eijnden]{albergo2023stochastic}
+Michael~S Albergo, Nicholas~M Boffi, and Eric Vanden-Eijnden.
+\newblock Stochastic interpolants: A unifying framework for flows and diffusions.
+\newblock \emph{arXiv preprint arXiv:2303.08797}, 2023.
+
+\bibitem[Ambrogioni(2023)]{ambrogioni_stat_thermo}
+Luca Ambrogioni.
+\newblock The statistical thermodynamics of generative diffusion models.
+\newblock \emph{arXiv preprint arXiv:2310.17467}, 2023.
+
+\bibitem[Bar-Tal et~al.(2024)Bar-Tal, Chefer, Tov, Herrmann, Paiss, Zada, Ephrat, Hur, Li, Michaeli, et~al.]{bar2024lumiere}
+Omer Bar-Tal, Hila Chefer, Omer Tov, Charles Herrmann, Roni Paiss, Shiran Zada, Ariel Ephrat, Junhwa Hur, Yuanzhen Li, Tomer Michaeli, et~al.
+\newblock Lumiere: A space-time diffusion model for video generation.
+\newblock \emph{arXiv preprint arXiv:2401.12945}, 2024.
+
+\bibitem[Ben~Arous et~al.(2005)Ben~Arous, Bogachev, and Molchanov]{ben2005limit}
+G{\'e}rard Ben~Arous, Leonid~V Bogachev, and Stanislav~A Molchanov.
+\newblock Limit theorems for sums of random exponentials.
+\newblock \emph{Probability theory and related fields}, 132:\penalty0 579--612, 2005.
+
+\bibitem[Benton et~al.(2023)Benton, De~Bortoli, Doucet, and Deligiannidis]{benton2023linear}
+Joe Benton, Valentin De~Bortoli, Arnaud Doucet, and George Deligiannidis.
+\newblock Linear convergence bounds for diffusion models via stochastic localization.
+\newblock \emph{arXiv preprint arXiv:2308.03686}, 2023.
+
+\bibitem[Berthier and Biroli(2011)]{berthier2011theoretical}
+Ludovic Berthier and Giulio Biroli.
+\newblock Theoretical perspective on the glass transition and amorphous materials.
+\newblock \emph{Reviews of modern physics}, 83\penalty0 (2):\penalty0 587, 2011.
+
+\bibitem[Biroli and M{\'e}zard(2023)]{GBM}
+Giulio Biroli and Marc M{\'e}zard.
+\newblock Generative diffusion in very large dimensions.
+\newblock \emph{J. Stat. Mech.}, page 093402, 2023.
+
+\bibitem[Bonnaire et~al.(2023)Bonnaire, Ghio, Krishnamurthy, Mignacco, Yamamura, and Biroli]{bonnaire2023high}
+Tony Bonnaire, Davide Ghio, Kamesh Krishnamurthy, Francesca Mignacco, Atsushi Yamamura, and Giulio Biroli.
+\newblock High-dimensional non-convex landscapes and gradient descent dynamics.
+\newblock \emph{arXiv preprint arXiv:2308.03754}, 2023.
+
+\bibitem[Cattiaux et~al.(2021)Cattiaux, Conforti, Gentil, and L{\'e}onard]{cattiaux2021time}
+Patrick Cattiaux, Giovanni Conforti, Ivan Gentil, and Christian L{\'e}onard.
+\newblock Time reversal of diffusion processes under a finite entropy condition.
+\newblock \emph{arXiv preprint arXiv:2104.07708}, 2021.
+
+\bibitem[Chaikin et~al.(1995{\natexlab{a}})Chaikin, Lubensky, and Witten]{LE}
+Paul~M Chaikin, Tom~C Lubensky, and Thomas~A Witten.
+\newblock \emph{Principles of condensed matter physics}, volume~10.
+\newblock Cambridge university press Cambridge, 1995{\natexlab{a}}.
+
+\bibitem[Chaikin et~al.(1995{\natexlab{b}})Chaikin, Lubensky, and Witten]{chaikin1995principles}
+Paul~M Chaikin, Tom~C Lubensky, and Thomas~A Witten.
+\newblock \emph{Principles of condensed matter physics}, volume~10.
+\newblock Cambridge university press Cambridge, 1995{\natexlab{b}}.
+
+\bibitem[Charbonneau et~al.(2023)Charbonneau, Marinari, Parisi, Ricci-tersenghi, Sicuro, Zamponi, and Mezard]{charbonneau2023spin}
+Patrick Charbonneau, Enzo Marinari, Giorgio Parisi, Federico Ricci-tersenghi, Gabriele Sicuro, Francesco Zamponi, and Marc Mezard.
+\newblock \emph{Spin Glass Theory and Far Beyond: Replica Symmetry Breaking after 40 Years}.
+\newblock World Scientific, 2023.
+
+\bibitem[Chen et~al.(2022)Chen, Chewi, Li, Li, Salim, and Zhang]{chen2022sampling}
+Sitan Chen, Sinho Chewi, Jerry Li, Yuanzhi Li, Adil Salim, and Anru~R Zhang.
+\newblock Sampling is as easy as learning the score: theory for diffusion models with minimal data assumptions.
+\newblock \emph{arXiv preprint arXiv:2209.11215}, 2022.
+
+\bibitem[Chrabaszcz et~al.(2017)Chrabaszcz, Loshchilov, and Hutter]{Chrabaszcz2017_Imagenet_downsampled}
+Patryk Chrabaszcz, Ilya Loshchilov, and Frank Hutter.
+\newblock A downsampled variant of imagenet as an alternative to the cifar datasets, 2017.
+
+\bibitem[Conforti et~al.(2023)Conforti, Durmus, and Silveri]{conforti2023score}
+Giovanni Conforti, Alain Durmus, and Marta~Gentiloni Silveri.
+\newblock Score diffusion models without early stopping: finite fisher information is all you need.
+\newblock \emph{arXiv preprint arXiv:2308.12240}, 2023.
+
+\bibitem[Cui et~al.(2023)Cui, Krzakala, Vanden-Eijnden, and Zdeborov{\'a}]{cui2023analysis}
+Hugo Cui, Florent Krzakala, Eric Vanden-Eijnden, and Lenka Zdeborov{\'a}.
+\newblock Analysis of learning a flow-based generative model from limited sample complexity.
+\newblock \emph{arXiv preprint arXiv:2310.03575}, 2023.
+
+\bibitem[De~Bortoli(2022)]{de2022convergence}
+Valentin De~Bortoli.
+\newblock Convergence of denoising diffusion models under the manifold hypothesis.
+\newblock \emph{arXiv preprint arXiv:2208.05314}, 2022.
+
+\bibitem[De~Bortoli et~al.(2021)De~Bortoli, Thornton, Heng, and Doucet]{de2021diffusion}
+Valentin De~Bortoli, James Thornton, Jeremy Heng, and Arnaud Doucet.
+\newblock Diffusion schr{\"o}dinger bridge with applications to score-based generative modeling.
+\newblock \emph{Advances in Neural Information Processing Systems}, 34:\penalty0 17695--17709, 2021.
+
+\bibitem[Derrida(1981)]{derrida1981random}
+Bernard Derrida.
+\newblock Random-energy model: An exactly solvable model of disordered systems.
+\newblock \emph{Physical Review B}, 24\penalty0 (5):\penalty0 2613, 1981.
+
+\bibitem[Donoho et~al.(2000)]{donoho2000high}
+David~L Donoho et~al.
+\newblock High-dimensional data analysis: The curses and blessings of dimensionality.
+\newblock \emph{AMS math challenges lecture}, 1\penalty0 (2000):\penalty0 32, 2000.
+
+\bibitem[Ghio et~al.(2023)Ghio, Dandi, Krzakala, and Zdeborov{\'a}]{ghio2023sampling}
+Davide Ghio, Yatin Dandi, Florent Krzakala, and Lenka Zdeborov{\'a}.
+\newblock Sampling with flows, diffusion and autoregressive neural networks: A spin-glass perspective.
+\newblock \emph{arXiv preprint arXiv:2308.14085}, 2023.
+
+\bibitem[Guth et~al.(2022)Guth, Coste, Bortoli, and Mallat]{guth2022wavelet}
+Florentin Guth, Simon Coste, Valentin~De Bortoli, and Stephane Mallat.
+\newblock Wavelet score-based generative modeling, 2022.
+
+\bibitem[Haussmann and Pardoux(1986)]{haussmann1986time}
+Ulrich~G Haussmann and Etienne Pardoux.
+\newblock Time reversal of diffusions.
+\newblock \emph{The Annals of Probability}, pages 1188--1205, 1986.
+
+\bibitem[He et~al.(2016)He, Zhang, Ren, and Sun]{Kaiming2015_ResNet}
+Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+\newblock Deep residual learning for image recognition.
+\newblock In \emph{2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, pages 770--778, 2016.
+\newblock \doi{10.1109/CVPR.2016.90}.
+
+\bibitem[Ho et~al.(2020)Ho, Jain, and Abbeel]{Ho2020}
+Jonathan Ho, Ajay Jain, and Pieter Abbeel.
+\newblock Denoising diffusion probabilistic models.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2020.
+
+\bibitem[Hyv{\"a}rinen and Dayan(2005)]{hyvarinen2005estimation}
+Aapo Hyv{\"a}rinen and Peter Dayan.
+\newblock Estimation of non-normalized statistical models by score matching.
+\newblock \emph{Journal of Machine Learning Research}, 6\penalty0 (4), 2005.
+
+\bibitem[Kadkhodaie et~al.(2023)Kadkhodaie, Guth, Simoncelli, and Mallat]{kadkhodaie2023generalization}
+Zahra Kadkhodaie, Florentin Guth, Eero~P Simoncelli, and St{\'e}phane Mallat.
+\newblock Generalization in diffusion models arises from geometry-adaptive harmonic representation.
+\newblock \emph{arXiv preprint arXiv:2310.02557}, 2023.
+
+\bibitem[Krizhevsky et~al.(2009)Krizhevsky, Hinton, et~al.]{Krizhevsky2009_CIFAR}
+Alex Krizhevsky, Geoffrey Hinton, et~al.
+\newblock Learning multiple layers of features from tiny images.
+\newblock \emph{Toronto, ON, Canada}, 2009.
+
+\bibitem[Lecun et~al.(1998)Lecun, Bottou, Bengio, and Haffner]{Lecun1998}
+Y.~Lecun, L.~Bottou, Y.~Bengio, and P.~Haffner.
+\newblock Gradient-based learning applied to document recognition.
+\newblock \emph{Proceedings of the IEEE}, 86\penalty0 (11):\penalty0 2278--2324, 1998.
+\newblock \doi{10.1109/5.726791}.
+
+\bibitem[Lee et~al.(2022)Lee, Lu, and Tan]{lee2022convergence}
+Holden Lee, Jianfeng Lu, and Yixin Tan.
+\newblock Convergence for score-based generative modeling with polynomial complexity.
+\newblock \emph{arXiv preprint arXiv:2206.06227}, 2022.
+
+\bibitem[Lucibello and M{\'e}zard(2024)]{lucibello2023exponential}
+Carlo Lucibello and Marc M{\'e}zard.
+\newblock The exponential capacity of dense associative memories.
+\newblock \emph{Phys.Rev.Lett}, 132:\penalty0 077301, 2024.
+
+\bibitem[Luo(2022)]{luo2022understanding}
+Calvin Luo.
+\newblock Understanding diffusion models: A unified perspective.
+\newblock \emph{arXiv preprint arXiv:2208.11970}, 2022.
+
+\bibitem[Mezard and Montanari(2009)]{mezard2009information}
+Marc Mezard and Andrea Montanari.
+\newblock \emph{Information, physics, and computation}.
+\newblock Oxford University Press, 2009.
+
+\bibitem[M{\'e}zard et~al.(1987)M{\'e}zard, Parisi, and Virasoro]{mezard1987spin}
+Marc M{\'e}zard, Giorgio Parisi, and Miguel~Angel Virasoro.
+\newblock \emph{Spin glass theory and beyond: An Introduction to the Replica Method and Its Applications}, volume~9.
+\newblock World Scientific Publishing Company, 1987.
+
+\bibitem[Opper and Saad(2001)]{opper2001advanced}
+Manfred Opper and David Saad.
+\newblock \emph{Advanced mean field methods: Theory and practice}.
+\newblock MIT press, 2001.
+
+\bibitem[Paszke et~al.(2019)Paszke, Gross, Massa, Lerer, Bradbury, Chanan, Killeen, Lin, Gimelshein, Antiga, Desmaison, Kopf, Yang, DeVito, Raison, Tejani, Chilamkurthy, Steiner, Fang, Bai, and Chintala]{Pytorch_2019}
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban Desmaison, Andreas Kopf, Edward Yang, Zachary DeVito, Martin Raison, Alykhan Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu~Fang, Junjie Bai, and Soumith Chintala.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock In \emph{Advances in Neural Information Processing Systems 32}, pages 8024--8035. Curran Associates, Inc., 2019.
+
+\bibitem[Poole et~al.(2022)Poole, Jain, Barron, and Mildenhall]{poole2022dreamfusion}
+Ben Poole, Ajay Jain, Jonathan~T Barron, and Ben Mildenhall.
+\newblock Dreamfusion: Text-to-3d using 2d diffusion.
+\newblock \emph{arXiv preprint arXiv:2209.14988}, 2022.
+
+\bibitem[Privman(1990)]{privman1990finite}
+Vladimir Privman.
+\newblock \emph{Finite size scaling and numerical simulation of statistical systems}.
+\newblock World Scientific, 1990.
+
+\bibitem[Raya and Ambrogioni(2023)]{ambrogioni}
+Gabriel Raya and Luca Ambrogioni.
+\newblock Spontaneous symmetry breaking in generative diffusion models.
+\newblock \emph{arXiv preprint arXiv:2305.19693}, 2023.
+
+\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and Brox]{Ronneberger2015_unet}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock U-net: Convolutional networks for biomedical image segmentation.
+\newblock In \emph{Medical Image Computing and Computer-Assisted Intervention--MICCAI 2015: 18th International Conference, Munich, Germany, October 5-9, 2015, Proceedings, Part III 18}, pages 234--241. Springer, 2015.
+
+\bibitem[Ruelle(1987)]{ruelle1987mathematical}
+David Ruelle.
+\newblock A mathematical reformulation of derrida's rem and grem.
+\newblock \emph{Communications in Mathematical Physics}, 108:\penalty0 225--239, 1987.
+
+\bibitem[Saharia et~al.(2022)Saharia, Chan, Saxena, Li, Whang, Denton, Ghasemipour, Gontijo~Lopes, Karagol~Ayan, Salimans, et~al.]{saharia2022photorealistic}
+Chitwan Saharia, William Chan, Saurabh Saxena, Lala Li, Jay Whang, Emily~L Denton, Kamyar Ghasemipour, Raphael Gontijo~Lopes, Burcu Karagol~Ayan, Tim Salimans, et~al.
+\newblock Photorealistic text-to-image diffusion models with deep language understanding.
+\newblock \emph{Advances in Neural Information Processing Systems}, 35:\penalty0 36479--36494, 2022.
+
+\bibitem[Sohl-Dickstein et~al.(2015)Sohl-Dickstein, Weiss, Maheswaranathan, and Ganguli]{Sohl_Dickstein2015}
+Jascha Sohl-Dickstein, Eric Weiss, Niru Maheswaranathan, and Surya Ganguli.
+\newblock Deep unsupervised learning using nonequilibrium thermodynamics.
+\newblock In \emph{International Conference on Machine Learning}, 2015.
+
+\bibitem[Song et~al.(2020)Song, Meng, and Ermon]{song2020denoising}
+Jiaming Song, Chenlin Meng, and Stefano Ermon.
+\newblock Denoising diffusion implicit models.
+\newblock \emph{arXiv preprint arXiv:2010.02502}, 2020.
+
+\bibitem[Song and Ermon(2019)]{Song2019}
+Yang Song and Stefano Ermon.
+\newblock Generative modeling by estimating gradients of the data distribution.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2019.
+
+\bibitem[Song et~al.(2021)Song, Sohl-Dickstein, Kingma, Kumar, Ermon, and Poole]{Song_Sohl-Dickstein2021}
+Yang Song, Jascha Sohl-Dickstein, Diederik~P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole.
+\newblock Score-based generative modeling through stochastic differential equations.
+\newblock In \emph{International Conference on Learning Representations}, 2021.
+
+\bibitem[Vincent(2011)]{vincent2011connection}
+Pascal Vincent.
+\newblock A connection between score matching and denoising autoencoders.
+\newblock \emph{Neural computation}, 23\penalty0 (7):\penalty0 1661--1674, 2011.
+
+\bibitem[Yang et~al.(2022)Yang, Zhang, Song, Hong, Xu, Zhao, Shao, Zhang, Cui, and Yang]{yang2022diffusion}
+Ling Yang, Zhilong Zhang, Yang Song, Shenda Hong, Runsheng Xu, Yue Zhao, Yingxia Shao, Wentao Zhang, Bin Cui, and Ming-Hsuan Yang.
+\newblock Diffusion models: A comprehensive survey of methods and applications.
+\newblock \emph{arXiv preprint arXiv:2209.00796}, 2022.
+
+\bibitem[Yoon et~al.(2023)Yoon, Choi, Kwon, and Ryu]{yoon2023diffusion}
+TaeHo Yoon, Joo~Young Choi, Sehyun Kwon, and Ernest~K Ryu.
+\newblock Diffusion probabilistic models generalize when they fail to memorize.
+\newblock In \emph{ICML 2023 Workshop on Structured Probabilistic Inference $\{$$\backslash$\&$\}$ Generative Modeling}, 2023.
+
+\bibitem[Yu et~al.(2016)Yu, Seff, Zhang, Song, Funkhouser, and Xiao]{Yu2015_LSUN}
+Fisher Yu, Ari Seff, Yinda Zhang, Shuran Song, Thomas Funkhouser, and Jianxiong Xiao.
+\newblock Lsun: Construction of a large-scale image dataset using deep learning with humans in the loop, 2016.
+
+\bibitem[Zinn-Justin(2021)]{zinn2021quantum}
+Jean Zinn-Justin.
+\newblock \emph{Quantum field theory and critical phenomena}, volume 171.
+\newblock Oxford university press, 2021.
+
+\end{thebibliography}
