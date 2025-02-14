@@ -1,3 +1,54 @@
-eap2-diffusion.egg-info/
-.venv/
-former/Dynamical-Regimes-of-Diffusion-Models
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+former/Dynamical-Regimes-of-Diffusion-Models/
+
+# Data and models
+data/
+*.pth # this is a format for pytorch models
+*.pt
+*.ckpt
+
+# Logs
+logs/
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+
+.specstory/
