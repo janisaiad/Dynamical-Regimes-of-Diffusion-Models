@@ -1,157 +1,137 @@
-import numpy as np
 import cupy as cp
+import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-import matplotlib.animation as animation
 from pathlib import Path
 import datetime
 from tqdm import tqdm
 
-class DiffusionHeatmapAnimation:
-    def __init__(self, n_points=1000, d=2, n_samples=5000, alpha=0.5, t_range=(0.01, 5), n_frames=200):
+class ExcessEntropyAnalysis:
+    def __init__(self, alpha: float = 1.0, dim: int = 2):
         """
-        Initialise l'animation de la distribution de probabilité pour le processus de diffusion.
+        Analyse l'excès d'entropie f(t) = s_sep(t) - s(t) qui caractérise
+        les trois régimes de la dynamique rétrograde.
         
         Args:
-            n_points (int): Nombre de points pour la grille 2D
-            d (int): Dimension (fixée à 2 pour la visualisation)
-            n_samples (int): Nombre d'échantillons pour l'estimation
-            alpha (float): log(n)/d, ratio pour l'exponentialité
-            t_range (tuple): Intervalle temporel
-            n_frames (int): Nombre d'images pour l'animation
+            alpha (float): Paramètre α = log(n)/d qui contrôle le collapse
+            dim (int): Dimension de l'espace (d)
         """
-        self.n_points = n_points
-        self.d = d
-        self.n_samples = n_samples
+        self.d = dim
         self.alpha = alpha
-        self.t_range = t_range
-        self.n_frames = n_frames
         
-        # Génère les données initiales (distribution gaussienne 2D)
-        self.data = cp.random.randn(n_samples, d)
+        # Calcule n à partir de α et d
+        self.n = int(cp.round(cp.exp(alpha * dim)))
+        print(f"Pour α = {alpha:.2f}, d = {dim}: utilisation de n = {self.n} points")
         
-        # Crée la grille 2D pour la heatmap
-        x = cp.linspace(-4, 4, n_points)
-        y = cp.linspace(-4, 4, n_points)
-        self.X, self.Y = cp.meshgrid(x, y)
-        
-        # Setup de l'animation
-        self.fig, (self.ax1, self.ax2) = plt.subplots(1, 2, figsize=(20, 10))
-        
-        # Crée l'échelle de temps logarithmique
-        self.times = cp.logspace(cp.log10(t_range[0]), cp.log10(t_range[1]), n_frames)
-        
-    def compute_theoretical_density(self, t):
-        """Calcule la densité de probabilité théorique au temps t."""
-        delta_t = 1 - cp.exp(-2*t)
-        Z = cp.zeros_like(self.X)
-        positions = cp.stack([self.X, self.Y], axis=-1)
-        
-        # Calcul de la distribution théorique
-        for a in self.data:
-            mean = a * cp.exp(-t)
-            Z += cp.exp(-0.5 * cp.sum((positions - mean.reshape(1,1,2))**2 / delta_t, axis=-1))
-            
-        return cp.asnumpy(Z / (2*np.pi*delta_t) / self.n_samples)
+        # Points initiaux sur la sphère unité (bien séparés)
+        self.initial_points = cp.random.randn(self.n, dim)
+        self.initial_points = self.initial_points / cp.linalg.norm(self.initial_points, axis=1)[:, cp.newaxis]
     
-    def compute_empirical_density(self, t):
-        """Calcule la densité de probabilité empirique au temps t."""
-        # Applique la diffusion aux données
-        data_t = self.data * cp.exp(-t) + cp.sqrt(1 - cp.exp(-2*t)) * cp.random.randn(self.n_samples, self.d)
+    def compute_f_t(self, t: float) -> float:
+        """
+        Calcule l'excès d'entropie par variable f(t) = s_sep(t) - s(t).
         
-        # Calcule la densité sur la grille par convolution avec noyau gaussien
-        Z = cp.zeros_like(self.X)
-        positions = cp.vstack([self.X.ravel(), self.Y.ravel()])
+        Pour t >> 1: f(t) = log(n)/d (régime I, gaussienne)
+        Pour t = t_C: f(t) = 0 (transition II → III)
+        Pour t → 0: f(t) → -∞ (régime III, mémorisation)
+        """
+        # Calcul de Δ_t = 1 - exp(-2t)
+        delta_t = 1 - cp.exp(-2 * t)
         
-        for x, y in data_t:
-            delta = positions - cp.array([[x], [y]])
-            kernel = cp.exp(-0.5 * cp.sum(delta**2, axis=0))
-            Z += kernel.reshape(self.n_points, self.n_points)
-            
-        return cp.asnumpy(Z / self.n_samples)
+        # 1. s_sep(t) = log(n)/d + (1/2)(1 + log(2πΔ_t))
+        # Entropie par variable pour n gaussiennes bien séparées
+        s_sep = self.alpha + 0.5 * (1 + cp.log(2 * cp.pi * delta_t))
         
-    def init_animation(self):
-        """Initialise l'animation."""
-        for ax in [self.ax1, self.ax2]:
-            ax.set_xlim(-4, 4)
-            ax.set_ylim(-4, 4)
-            
-        self.im1 = self.ax1.imshow(np.zeros((self.n_points, self.n_points)), 
-                                  extent=[-4, 4, -4, 4],
-                                  origin='lower',
-                                  cmap='viridis')
-        self.im2 = self.ax2.imshow(np.zeros((self.n_points, self.n_points)), 
-                                  extent=[-4, 4, -4, 4],
-                                  origin='lower',
-                                  cmap='viridis')
-                                  
-        self.ax1.set_title('Distribution théorique')
-        self.ax2.set_title('Distribution empirique')
-        plt.colorbar(self.im1, ax=self.ax1)
-        plt.colorbar(self.im2, ax=self.ax2)
-        return [self.im1, self.im2]
-    
-    def update(self, frame):
-        """Met à jour l'animation pour chaque frame."""
-        t = float(self.times[frame])
-        Z_theo = self.compute_theoretical_density(t)
-        Z_emp = self.compute_empirical_density(t)
+        # 2. s(t) pour le mélange de gaussiennes
+        means = self.initial_points * cp.exp(-t)  # Centres évoluant selon e^(-t)
         
-        self.im1.set_array(Z_theo)
-        self.im2.set_array(Z_emp)
+        # Matrice des termes dans le log pour le mélange
+        diff = means[:, cp.newaxis, :] - means[cp.newaxis, :, :]
+        quad_terms = cp.sum(diff**2, axis=2)
+        log_terms = -0.5 * quad_terms / (2 * delta_t) - \
+                   (self.d/2) * cp.log(4 * cp.pi * delta_t) - \
+                   cp.log(self.n)
         
-        max_val = max(np.max(Z_theo), np.max(Z_emp))
-        self.im1.set_clim(0, max_val)
-        self.im2.set_clim(0, max_val)
+        # Entropie empirique par variable
+        s_emp = -cp.mean(cp.log(cp.mean(cp.exp(log_terms), axis=1))) / self.d
         
-        self.ax1.set_title(f'Distribution théorique (t = {t:.3f})')
-        self.ax2.set_title(f'Distribution empirique (t = {t:.3f})')
-        
-        return [self.im1, self.im2]
-    
-    def create_animation(self, save_path=None):
-        """Crée et sauvegarde l'animation."""
-        anim = FuncAnimation(self.fig, self.update, frames=tqdm(range(self.n_frames)),
-                           init_func=self.init_animation, blit=True,
-                           interval=50)
-        
-        if save_path:
-            writer = animation.PillowWriter(fps=20)
-            save_path = str(save_path).replace('.mp4', '.gif')
-            anim.save(save_path, writer=writer)
-            plt.close()
-        else:
-            plt.show()
-        
-        return anim
+        # 3. Excès d'entropie f(t) = s_sep(t) - s(t)
+        return float(cp.asnumpy(s_sep - s_emp))
 
-def main():
-    # Crée deux animations avec différents ratios alpha
-    configs = [
-        {"n_samples": 100, "alpha": 0.1},  # Peu d'échantillons
-        {"n_samples": 5000, "alpha": 2.0}  # Beaucoup d'échantillons
-    ]
-    
-    # Sauvegarde les animations
-    save_dir = Path(__file__).parent.parent.parent / "results" / "animations"
-    save_dir.mkdir(parents=True, exist_ok=True)
-    
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    for i, config in tqdm(enumerate(configs), total=len(configs), desc="Generating animations"):
-        print(f"Génération de l'animation {i+1}/2 avec alpha={config['alpha']}")
-        animator = DiffusionHeatmapAnimation(
-            n_points=100,
-            d=2,
-            n_samples=config['n_samples'],
-            alpha=config['alpha'],
-            t_range=(0.01, 5),
-            n_frames=200
-        )
+    def analyze_regimes(self, t_range=(0.01, 5), n_points=1000):
+        """
+        Analyse les trois régimes de la dynamique rétrograde.
+        """
+        times = np.logspace(np.log10(t_range[0]), np.log10(t_range[1]), n_points)
+        f_t = np.array([self.compute_f_t(t) for t in tqdm(times, desc="Calcul f(t)")])
         
-        save_path = save_dir / f"diffusion_heatmap_alpha{config['alpha']}_{timestamp}.gif"
-        animator.create_animation(save_path=str(save_path))
-        print(f"Animation sauvegardée dans: {save_path}")
+        # Trouve t_C où f(t) = 0 (transition II → III)
+        collapse_idx = np.argmin(np.abs(f_t))
+        t_c = times[collapse_idx]
+        
+        # Valeur asymptotique f(t) → log(n)/d pour t >> 1
+        f_inf = self.alpha
+        
+        return times, f_t, t_c, f_inf
+
+def plot_regimes_analysis():
+    """Analyse les régimes pour différentes valeurs de α."""
+    alphas = np.linspace(0.1, 3.5, 30)
+    
+    plt.figure(figsize=(15, 10))
+    t_cs = []
+    
+    for alpha in alphas:
+        print(f"\nAnalyse pour α = {alpha:.2f}")
+        analyzer = ExcessEntropyAnalysis(alpha=alpha)
+        times, f_t, t_c, f_inf = analyzer.analyze_regimes()
+        t_cs.append(t_c)
+        
+        plt.plot(times, f_t, '-', label=f'α = {alpha:.1f}')
+        plt.axvline(x=t_c, linestyle=':', alpha=0.3, color='g')
+        plt.axhline(y=f_inf, linestyle='--', alpha=0.3, color='r')
+    
+    plt.axhline(y=0, color='k', linestyle='-', alpha=0.2)
+    plt.xlabel('Temps t (échelle log)')
+    plt.ylabel('Excès d\'entropie f(t)')
+    plt.xscale('log')
+    plt.grid(True)
+    plt.legend()
+    
+    # Annotations des régimes
+    plt.text(0.02, 2, 'Régime III\n(Mémorisation)', ha='left', va='top')
+    plt.text(0.5, 2, 'Régime II\n(Généralisation)', ha='center', va='top')
+    plt.text(3, 2, 'Régime I\n(Bruit)', ha='right', va='top')
+    
+    plt.title('Analyse des régimes de la dynamique rétrograde\n' + 
+              'f(t) = s_sep(t) - s(t) pour différentes valeurs de α')
+    
+    # Sauvegarde
+    save_dir = Path(__file__).parent.parent.parent / "results" / "entropy_analysis"
+    save_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    save_path = save_dir / f"regimes_analysis_{timestamp}.png"
+    
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    # Relation entre α et t_C
+    plt.figure(figsize=(10, 6))
+    plt.plot(alphas, t_cs, 'bo-')
+    plt.xlabel('α = log(n)/d')
+    plt.ylabel('Temps de collapse t_C')
+    plt.grid(True)
+    plt.title('Temps de collapse en fonction de α\n' +
+              'Plus α est grand, plus le régime III est réduit')
+    
+    save_path = save_dir / f"tc_vs_alpha_{timestamp}.png"
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print("\nRésultats :")
+    for alpha, t_c in zip(alphas, t_cs):
+        print(f"α = {alpha:.2f}:")
+        print(f"  t_C = {t_c:.3f}")
+        print(f"  f(t>>1) = {alpha:.2f}")
 
 if __name__ == "__main__":
-    main()
+    plot_regimes_analysis()
