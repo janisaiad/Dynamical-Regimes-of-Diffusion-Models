@@ -9,6 +9,9 @@ import logging
 import json
 from pathlib import Path
 import datetime
+from matplotlib.animation import FuncAnimation
+from matplotlib.patches import Circle
+import matplotlib.animation as animation
 
 # Configuration globale
 CONFIG = {
@@ -233,17 +236,117 @@ class DiffusionVolumeAnalysis:
         
         return results
 
-def main():
-    # Utilise directement la configuration globale
-    config = DiffusionConfig.from_dict(CONFIG)
-    analyzer = DiffusionVolumeAnalysis(config)
-    results = analyzer.analyze_and_save()
+class DiffusionAnimation2D:
+    def __init__(self, n_points=5, d=2, t_range=(0.01, 5), n_frames=200):
+        self.n_points = n_points
+        self.d = d
+        self.t_range = t_range
+        self.n_frames = n_frames
+        
+        # Génère les points initiaux
+        self.points = np.random.randn(n_points, d)
+        # Normalise les points
+        self.points = self.points / np.linalg.norm(self.points, axis=1)[:, np.newaxis]
+        
+        # Setup de l'animation
+        self.fig, (self.ax, self.ax_time) = plt.subplots(2, 1, figsize=(10, 12), 
+                                                         gridspec_kw={'height_ratios': [4, 1]})
+        self.circles = []
+        
+        # Crée l'échelle de temps logarithmique
+        self.times = np.logspace(np.log10(t_range[0]), np.log10(t_range[1]), n_frames)
+        
+    def init_animation(self):
+        """Initialise l'animation."""
+        self.ax.set_xlim(-2.5, 2.5)
+        self.ax.set_ylim(-2.5, 2.5)
+        self.ax.set_aspect('equal')
+        self.ax.grid(True)
+        
+        # Crée les cercles initiaux
+        self.circles = [Circle((0, 0), 0.1, alpha=0.3) for _ in range(self.n_points)]
+        for circle in self.circles:
+            self.ax.add_artist(circle)
+        
+        # Configure l'axe temporel
+        self.ax_time.set_xlim(self.t_range)
+        self.ax_time.set_xscale('log')
+        self.ax_time.set_ylim(-0.1, 1.1)
+        self.ax_time.set_xlabel('Temps (échelle log)')
+        self.ax_time.grid(True)
+        
+        # Ligne verticale pour indiquer le temps actuel
+        self.time_line = self.ax_time.axvline(x=self.t_range[0], color='r')
+        
+        return self.circles + [self.time_line]
     
-    print("\nRésultats de l'analyse:")
-    print(f"Dimension: {config.dim}")
-    print(f"Nombre d'échantillons: {config.n_samples}")
-    print(f"Temps de collapse t_C ≈ {results['t_c']:.3f}")
-    print(f"Entropie excédentaire maximale: {results['max_excess_entropy']:.3f}")
+    def update(self, frame):
+        """Met à jour l'animation pour chaque frame."""
+        t = self.times[frame]
+        
+        # Calcule Delta_t
+        Delta_t = 1 - np.exp(-2*t)
+        
+        # Met à jour chaque cercle
+        for i, (circle, point) in enumerate(zip(self.circles, self.points)):
+            # Position du centre
+            center = point * np.exp(-t)
+            # Rayon
+            radius = np.sqrt(Delta_t)
+            
+            # Met à jour le cercle
+            circle.center = center
+            circle.radius = radius
+            
+            # Couleur basée sur l'indice du point
+            circle.set_facecolor(plt.cm.viridis(i/self.n_points))
+            
+        # Met à jour le titre et l'indicateur de temps
+        self.ax.set_title(f'Temps t = {t:.3f}\nΔt = {Delta_t:.3f}')
+        self.time_line.set_xdata([t, t])
+        
+        # Ajoute un point sur l'axe temporel
+        self.ax_time.scatter(t, 0.5, color='red', alpha=0.5, s=1)
+        
+        return self.circles + [self.time_line]
+    
+    def create_animation(self, save_path=None):
+        """Crée et sauvegarde l'animation."""
+        anim = FuncAnimation(self.fig, self.update, frames=self.n_frames,
+                           init_func=self.init_animation, blit=True,
+                           interval=100)
+        
+        if save_path:
+            writer = animation.PillowWriter(fps=20)
+            save_path = str(save_path).replace('.mp4', '.gif')
+            anim.save(save_path, writer=writer)
+            plt.close()
+        else:
+            plt.show()
+        
+        return anim
+
+def main():
+    # Configuration avec échelle logarithmique
+    config = {
+        "n_points": 10,           # Nombre de points
+        "d": 2,                   # Dimension (2D)
+        "t_range": (0.01, 5),     # Intervalle de temps (commence à 0.01 pour log)
+        "n_frames": 200           # Nombre de frames pour l'animation
+    }
+    
+    # Crée l'animation
+    animator = DiffusionAnimation2D(**config)
+    
+    # Sauvegarde l'animation
+    save_dir = Path(__file__).parent.parent.parent / "results" / "animations"
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    save_path = save_dir / f"diffusion_animation_log_{timestamp}.gif"
+    
+    animator.create_animation(save_path=str(save_path))
+    print(f"Animation sauvegardée dans: {save_path}")
 
 if __name__ == "__main__":
     main()
