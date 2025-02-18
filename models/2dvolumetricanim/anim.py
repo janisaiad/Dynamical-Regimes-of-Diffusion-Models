@@ -14,7 +14,7 @@ class DiffusionVolumeAnalysis:
             sigma (float): Écart-type du bruit gaussien
             device (int): GPU device ID
         """
-        cp.cuda.Device(device).use()
+        cp.cuda.Device(device).use() # Use GPU device
         self.n = n_samples
         self.d = dim
         self.sigma = sigma
@@ -54,8 +54,8 @@ class DiffusionVolumeAnalysis:
     def find_collapse_time(self, t_range):
         """Trouve le temps de collapse t_C."""
         times = cp.linspace(t_range[0], t_range[1], 1000)
-        v_emp = cp.array([self.compute_empirical_volume(t) for t in times])
-        v_pop = cp.array([self.compute_population_volume(t) for t in times])
+        v_emp = cp.array([self.compute_empirical_volume(t).get() for t in times])
+        v_pop = cp.array([self.compute_population_volume(t).get() for t in times])
         
         # Trouve où les volumes sont égaux
         diff = cp.abs(v_emp - v_pop)
@@ -65,14 +65,14 @@ class DiffusionVolumeAnalysis:
     def visualize_volumes(self, t_range):
         """Visualise l'évolution des volumes."""
         times = cp.linspace(t_range[0], t_range[1], 100)
-        v_emp = cp.asnumpy([self.compute_empirical_volume(t) for t in times])
-        v_pop = cp.asnumpy([self.compute_population_volume(t) for t in times])
-        times = cp.asnumpy(times)
+        v_emp = cp.array([self.compute_empirical_volume(t).get() for t in times]).get()
+        v_pop = cp.array([self.compute_population_volume(t).get() for t in times]).get()
+        times = times.get()
         
         plt.figure(figsize=(10, 6))
         plt.plot(times, v_emp, label='Volume empirique (M^e)')
         plt.plot(times, v_pop, label='Volume population (M)')
-        plt.axvline(x=self.find_collapse_time(t_range), color='r', 
+        plt.axvline(x=self.find_collapse_time(t_range).get(), color='r', 
                    linestyle='--', label='t_C')
         plt.xlabel('Temps t')
         plt.ylabel('log(Volume)')
@@ -94,7 +94,7 @@ def run_experiment():
         
         # Trouve et affiche t_C
         t_c = analyzer.find_collapse_time((0, 5))
-        print(f"Temps de collapse t_C ≈ {t_c:.3f}")
+        print(f"Temps de collapse t_C ≈ {t_c.get():.3f}")
         
         # Visualise les volumes
         analyzer.visualize_volumes((0, 5))
@@ -103,7 +103,7 @@ def run_experiment():
         t = cp.linspace(0, 5, 100)
         excess_entropy = (analyzer.compute_empirical_volume(t) - 
                          analyzer.compute_population_volume(t)) / analyzer.d
-        print(f"Entropie excédentaire maximale: {cp.max(excess_entropy):.3f}")
+        print(f"Entropie excédentaire maximale: {cp.max(excess_entropy).get():.3f}")
 
 if __name__ == "__main__":
     run_experiment()
