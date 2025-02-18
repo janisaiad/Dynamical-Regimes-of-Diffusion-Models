@@ -252,9 +252,32 @@ class DiffusionAnimation2D:
         self.fig, (self.ax, self.ax_time) = plt.subplots(2, 1, figsize=(10, 12), 
                                                          gridspec_kw={'height_ratios': [4, 1]})
         self.circles = []
+        self.trajectories = [[] for _ in range(n_points)]  # Pour stocker les trajectoires
         
         # Crée l'échelle de temps logarithmique
         self.times = np.logspace(np.log10(t_range[0]), np.log10(t_range[1]), n_frames)
+        
+        # Calcul du temps de collapse (quand les cercles se touchent)
+        self.t_collapse = self.compute_collapse_time()
+        
+    def compute_collapse_time(self):
+        """Calcule le temps approximatif de collapse."""
+        # Trouve la plus petite distance entre deux points
+        min_dist = float('inf')
+        for i in range(self.n_points):
+            for j in range(i + 1, self.n_points):
+                dist = np.linalg.norm(self.points[i] - self.points[j])
+                min_dist = min(min_dist, dist)
+        
+        # Le collapse se produit quand 2*radius = min_dist*exp(-t)
+        # 2*sqrt(1-exp(-2t)) = min_dist*exp(-t)
+        # Résolution numérique approximative
+        t = 0.01
+        while t < 5:
+            if 2*np.sqrt(1-np.exp(-2*t)) >= min_dist*np.exp(-t):
+                return t
+            t += 0.01
+        return t
         
     def init_animation(self):
         """Initialise l'animation."""
@@ -278,7 +301,13 @@ class DiffusionAnimation2D:
         # Ligne verticale pour indiquer le temps actuel
         self.time_line = self.ax_time.axvline(x=self.t_range[0], color='r')
         
-        return self.circles + [self.time_line]
+        # Ligne verticale pour le temps de collapse
+        self.collapse_line = self.ax_time.axvline(x=self.t_collapse, color='g', 
+                                                 linestyle='--', alpha=0.5)
+        self.ax_time.text(self.t_collapse, 1.05, f't_c = {self.t_collapse:.3f}', 
+                         color='g', ha='center')
+        
+        return self.circles + [self.time_line, self.collapse_line]
     
     def update(self, frame):
         """Met à jour l'animation pour chaque frame."""
@@ -287,7 +316,7 @@ class DiffusionAnimation2D:
         # Calcule Delta_t
         Delta_t = 1 - np.exp(-2*t)
         
-        # Met à jour chaque cercle
+        # Met à jour chaque cercle et trace les trajectoires
         for i, (circle, point) in enumerate(zip(self.circles, self.points)):
             # Position du centre
             center = point * np.exp(-t)
@@ -299,16 +328,27 @@ class DiffusionAnimation2D:
             circle.radius = radius
             
             # Couleur basée sur l'indice du point
-            circle.set_facecolor(plt.cm.viridis(i/self.n_points))
+            color = plt.cm.viridis(i/self.n_points)
+            circle.set_facecolor(color)
+            
+            # Ajoute le point à la trajectoire et trace
+            self.trajectories[i].append(center)
+            if len(self.trajectories[i]) > 1:
+                traj = np.array(self.trajectories[i])
+                self.ax.plot(traj[-2:, 0], traj[-2:, 1], color=color, alpha=0.3)
             
         # Met à jour le titre et l'indicateur de temps
-        self.ax.set_title(f'Temps t = {t:.3f}\nΔt = {Delta_t:.3f}')
+        title = f'Temps t = {t:.3f}\nΔt = {Delta_t:.3f}'
+        if abs(t - self.t_collapse) < (self.times[1] - self.times[0]):
+            title += '\nCollapse!'
+        self.ax.set_title(title)
+        
         self.time_line.set_xdata([t, t])
         
         # Ajoute un point sur l'axe temporel
         self.ax_time.scatter(t, 0.5, color='red', alpha=0.5, s=1)
         
-        return self.circles + [self.time_line]
+        return self.circles + [self.time_line, self.collapse_line]
     
     def create_animation(self, save_path=None):
         """Crée et sauvegarde l'animation."""
@@ -329,9 +369,9 @@ class DiffusionAnimation2D:
 def main():
     # Configuration avec échelle logarithmique
     config = {
-        "n_points": 10,           # Nombre de points
+        "n_points": 8,            # Nombre de points réduit pour mieux voir
         "d": 2,                   # Dimension (2D)
-        "t_range": (0.01, 5),     # Intervalle de temps (commence à 0.01 pour log)
+        "t_range": (0.01, 5),     # Intervalle de temps
         "n_frames": 200           # Nombre de frames pour l'animation
     }
     
@@ -343,7 +383,7 @@ def main():
     save_dir.mkdir(parents=True, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    save_path = save_dir / f"diffusion_animation_log_{timestamp}.gif"
+    save_path = save_dir / f"diffusion_animation_trajectories_{timestamp}.gif"
     
     animator.create_animation(save_path=str(save_path))
     print(f"Animation sauvegardée dans: {save_path}")
