@@ -1,4 +1,8 @@
 # EAP2-Diffusion
+uv add cupy-cuda12x
+
+
+
 
 
 
