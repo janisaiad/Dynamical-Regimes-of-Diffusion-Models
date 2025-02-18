@@ -1,5 +1,13 @@
 # EAP2-Diffusion
+
+List of useful commands :
+
+```
+it fetch --all --prune && git branch -r | grep -v '\->
+' | while read remote; do git branch --track "${remote#origin/}" "$remote" 2>/dev/null; done && git pull --all
 uv add cupy-cuda12x
+uv add torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
 
 
 
