@@ -33,9 +33,6 @@ ENV/
 *.swp
 *.swo
 
-# Project specific
-former/Dynamical-Regimes-of-Diffusion-Models/
-
 # Data and models
 data/
 *.pth # this is a format for pytorch models
