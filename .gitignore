@@ -19,7 +19,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
+*.pyc
 # Virtual Environment
 .env
 .venv
@@ -49,3 +49,4 @@ Thumbs.db
 
 
 .specstory/
+tests/__pycache__/test_torch.cpython-311-pytest-8.3.4.pyc
