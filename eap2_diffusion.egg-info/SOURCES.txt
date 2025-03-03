@@ -6,4 +6,5 @@ eap2_diffusion.egg-info/SOURCES.txt
 eap2_diffusion.egg-info/dependency_links.txt
 eap2_diffusion.egg-info/requires.txt
 eap2_diffusion.egg-info/top_level.txt
+tests/test_cupy.py
 tests/test_torch.py
