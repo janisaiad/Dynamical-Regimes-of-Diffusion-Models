@@ -6,6 +6,8 @@
 \usepackage{xcolor}
 \usepackage{bm}
 \usepackage{physics}
+\usepackage{hyperref}
+\usepackage{subcaption}
 
 \title{Calcul des Probabilités et Potentiels pour les Régimes Dynamiques des Modèles de Diffusion}
 \author{Analyse Mathématique}
@@ -240,10 +242,297 @@ Pour $t \ll t_s$, nous avons $\tanh\left(\tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma
 
 La transition entre ces deux régimes se produit précisément lorsque $t \approx t_s$. À ce moment, les variances du potentiel autour des points $\pm \vec{m}$ deviennent négatives, conduisant à la bifurcation caractéristique de ce système.
 
+\section{Potentiel réduit et hiérarchie de séparation}
+
+\subsection{Potentiel en fonction de la variable réduite $q$}
+
+Pour mieux comprendre les transitions de phase dans le processus de diffusion, il est utile d'introduire la variable réduite $q = \frac{\vec{x} \cdot \vec{m}}{\sqrt{d}}$, qui représente le recouvrement normalisé entre le point $\vec{x}$ et la direction $\vec{m}$. Le potentiel peut alors s'exprimer comme une fonction de $q$ et $t$:
+
+\begin{align}
+V(q, t) = \frac{1}{2}q^2 - 2\tilde{\mu}^2 \log \cosh\left(q e^{-t} \sqrt{d}\right)
+\end{align}
+
+Cette formulation met en évidence que le potentiel dépend essentiellement de deux paramètres: le temps $t$ et la dimension $d$. La transition entre le régime à un seul puits et le régime à double puits est contrôlée par le produit $e^{-t}\sqrt{d}$.
+
+\subsection{Temps critique de séparation}
+
+Le temps critique de séparation $t_s$ correspond au moment où la courbure du potentiel à $q=0$ s'annule, c'est-à-dire $\frac{\partial^2 V}{\partial q^2}(q=0, t_s) = 0$. Cette condition nous donne:
+
+\begin{align}
+1 - 2\tilde{\mu}^2 d e^{-2t_s} = 0
+\end{align}
+
+ce qui conduit à:
+
+\begin{align}
+t_s = \frac{1}{2}\log(2\tilde{\mu}^2 d)
+\end{align}
+
+À des termes sous-dominants près, cela correspond à $t_s \approx \frac{1}{2}\log d$, comme mentionné précédemment.
+
+\subsection{Effet de $\varepsilon$ et hiérarchie de séparation}
+
+Lorsque l'on considère des perturbations $\vec{\varepsilon}$ qui ne sont pas orthogonales à $\vec{m}$, on obtient une hiérarchie de temps de séparation. Soit $\vec{\varepsilon} = \varepsilon_{\parallel}\frac{\vec{m}}{|\vec{m}|} + \vec{\varepsilon}_{\perp}$, où $\vec{\varepsilon}_{\perp}$ est orthogonal à $\vec{m}$. Le produit scalaire devient:
+
+\begin{align}
+\vec{x} \cdot \vec{m} &= (\pm\vec{m} \pm \vec{\varepsilon}) \cdot \vec{m}\\
+&= \pm|\vec{m}|^2 \pm \varepsilon_{\parallel}|\vec{m}|\\
+&= \pm\tilde{\mu}^2 d \pm \varepsilon_{\parallel}\tilde{\mu}\sqrt{d}
+\end{align}
+
+La variable réduite $q$ s'écrit alors:
+
+\begin{align}
+q &= \frac{\vec{x} \cdot \vec{m}}{\sqrt{d}}\\
+&= \pm\tilde{\mu}^2\sqrt{d} \pm \varepsilon_{\parallel}\tilde{\mu}
+\end{align}
+
+Pour de grandes valeurs de $d$, le premier terme domine, mais la présence du terme additionnel $\varepsilon_{\parallel}\tilde{\mu}$ introduit une asymétrie dans le potentiel. Cette asymétrie crée une hiérarchie dans les barrières de potentiel, ce qui conduit à des temps de séparation différents pour différentes directions de $\vec{\varepsilon}$.
+
+\subsection{Structure hiérarchique du potentiel}
+
+L'asymétrie introduite par $\varepsilon_{\parallel}$ modifie la profondeur relative des puits de potentiel. Pour un vecteur $\vec{\varepsilon}$ avec une composante parallèle positive ($\varepsilon_{\parallel} > 0$), le puits autour de $+\vec{m}$ devient plus profond que celui autour de $-\vec{m}$, et vice versa pour $\varepsilon_{\parallel} < 0$.
+
+Cette asymétrie conduit à une hiérarchie de temps critiques:
+
+\begin{align}
+t_s(\varepsilon_{\parallel}) \approx \frac{1}{2}\log\left(\frac{2\tilde{\mu}^2 d}{1 + 2\varepsilon_{\parallel}\tilde{\mu}/\sqrt{d}}\right)
+\end{align}
+
+Pour $\varepsilon_{\parallel} > 0$, le temps critique est légèrement inférieur à $t_s$, tandis que pour $\varepsilon_{\parallel} < 0$, il est légèrement supérieur. Cette différence, bien que petite pour $d$ grand, crée une séquence hiérarchique de transitions: d'abord la séparation entre les classes principales ($\pm\vec{m}$), puis des sous-séparations au sein de chaque classe.
+
+\subsection{Régimes dynamiques après la séparation}
+
+Après la transition de séparation, les trajectoires sont "engagées" vers l'un des centres $\pm\vec{m}$. Pour une trajectoire engagée vers $+\vec{m}$, le score se simplifie en:
+
+\begin{align}
+S_i^+(\vec{x}) = -\frac{x_i}{\Gamma_t} + m_i\frac{e^{-t}}{\Gamma_t}
+\end{align}
+
+C'est le score du processus backward d'une gaussienne simple centrée en $+\vec{m}$. Cela conduit à l'équation d'évolution:
+
+\begin{align}
+-dx_i = \left(-\frac{x_i}{\Gamma_t} + m_i\frac{e^{-t}}{\Gamma_t}\right)dt + d\eta_i(t)
+\end{align}
+
+où $d\eta_i(t)$ est la racine carrée de deux fois un mouvement brownien. Cette équation garantit que toutes les trajectoires évoluant selon elle généreront la gaussienne centrée en $+\vec{m}$.
+
+De façon analogue, pour les trajectoires engagées vers $-\vec{m}$, on obtient la même équation avec $m_i$ remplacé par $-m_i$.
+
+\section{Autosimilarité et structures hiérarchiques via SVD}
+
+\subsection{SVD et axes principaux pour $\vec{\varepsilon}$ orthogonal}
+
+Lorsque $\vec{\varepsilon}$ est orthogonal à $\vec{m}$, nous pouvons effectuer une décomposition en valeurs singulières (SVD) très élégante de la matrice de covariance du système. Considérons l'espace engendré par $\vec{m}$ et $\vec{\varepsilon}$. Ces deux vecteurs forment une base naturelle pour analyser le comportement du système.
+
+La matrice de covariance $\Sigma$ du mélange gaussien peut s'écrire comme:
+
+\begin{align}
+\Sigma &= \mathbb{E}[(\vec{x}-\mathbb{E}[\vec{x}])(\vec{x}-\mathbb{E}[\vec{x}])^T] \\
+&= \frac{1}{2}\left[ (\vec{m}-\vec{0})(\vec{m}-\vec{0})^T + (-\vec{m}-\vec{0})(-\vec{m}-\vec{0})^T \right] + \Gamma_t \mathbf{I} \\
+&= \vec{m}\vec{m}^T + \Gamma_t \mathbf{I}
+\end{align}
+
+La SVD de cette matrice révèle deux directions principales:
+\begin{enumerate}
+    \item La direction de $\vec{m}$ avec valeur propre $\lambda_1 = |\vec{m}|^2 + \Gamma_t = \tilde{\mu}^2 d + \Gamma_t$
+    \item Les directions orthogonales à $\vec{m}$ (dont $\vec{\varepsilon}$ fait partie) avec valeur propre $\lambda_2 = \Gamma_t$
+\end{enumerate}
+
+Cette structure des valeurs propres explique directement la hiérarchie observée: la séparation se produit d'abord dans la direction principale $\vec{m}$ (avec la plus grande variance), puis potentiellement dans les directions secondaires comme $\vec{\varepsilon}$.
+
+\subsection{Scores conditionnels et potentiels autosimilaires}
+
+Considérons maintenant les scores conditionnels, c'est-à-dire les scores calculés en supposant que le système s'est déjà engagé vers $+\vec{m}$ ou $-\vec{m}$. Pour une trajectoire qui collapse vers $+\vec{m}$, le score conditionnel est:
+
+\begin{align}
+S_i^{\text{cond}+}(\vec{x}) = -\frac{x_i - m_i e^{-t}}{\Gamma_t}
+\end{align}
+
+Ce score correspond à celui d'une distribution gaussienne centrée en $\vec{m}e^{-t}$ avec variance $\Gamma_t$. Le potentiel conditionnel correspondant est:
+
+\begin{align}
+V^{\text{cond}+}(\vec{x}, t) = \frac{1}{2}\sum_i \frac{(x_i - m_i e^{-t})^2}{\Gamma_t} + C
+\end{align}
+
+où $C$ est une constante.
+
+Examinons maintenant ce qui se passe quand on applique une perturbation $\vec{\varepsilon}$ autour de $\vec{m}$. Si nous considérons le sous-espace orthogonal à $\vec{m}$ et centré en $\vec{m}$, nous pouvons définir une nouvelle variable:
+
+\begin{align}
+\vec{y} = \vec{x} - \vec{m}
+\end{align}
+
+Dans ce sous-espace, le potentiel conditionnel s'écrit:
+
+\begin{align}
+V^{\text{cond}+}(\vec{y} + \vec{m}, t) = \frac{1}{2}\sum_i \frac{(y_i + m_i(1-e^{-t}))^2}{\Gamma_t} + C
+\end{align}
+
+Pour $t \gg 0$, le terme $m_i(1-e^{-t}) \approx m_i$, et le potentiel devient:
+
+\begin{align}
+V^{\text{cond}+}(\vec{y} + \vec{m}, t) \approx \frac{1}{2}\sum_i \frac{(y_i + m_i)^2}{\Gamma_t} + C
+\end{align}
+
+Avec $\vec{y}$ orthogonal à $\vec{m}$ (comme $\vec{\varepsilon}$), nous avons $\sum_i y_i m_i = 0$, et le potentiel se simplifie:
+
+\begin{align}
+V^{\text{cond}+}(\vec{y} + \vec{m}, t) \approx \frac{1}{2}\sum_i \left(\frac{y_i^2}{\Gamma_t} + \frac{m_i^2}{\Gamma_t}\right) + C
+\end{align}
+
+Cette forme est remarquable: le premier terme est un potentiel quadratique en $\vec{y}$, tout comme le potentiel original en $\vec{x}$ pour $t \gg t_s$ (avant la séparation).
+
+\subsection{Autosimilarité et fractales dans les modèles de diffusion}
+
+L'observation précédente révèle une propriété fascinante d'autosimilarité: après conditionnement sur la séparation principale (selon $\vec{m}$), le potentiel dans le sous-espace orthogonal présente la même structure que le potentiel original à des temps antérieurs.
+
+Si nous introduisons une perturbation $\vec{\varepsilon}$ avec une composante parallèle à elle-même, par exemple $\vec{\alpha} = \alpha \frac{\vec{\varepsilon}}{|\vec{\varepsilon}|}$, nous obtenons un deuxième niveau de séparation, similaire au premier niveau mais à une échelle différente.
+
+Cette structure se répète potentiellement à plusieurs niveaux, créant un comportement de type fractal dans l'espace des configurations. Pour que cette autosimilarité soit exacte, le rapport entre les échelles successives doit être constant. Cela nous conduit à un critère sur $\vec{\varepsilon}$:
+
+\begin{align}
+\frac{|\vec{\varepsilon}|^2}{\Gamma_t} = \frac{|\vec{m}|^2}{\Gamma_{t_0}}
+\end{align}
+
+où $t_0$ est le temps initial (avant la première séparation) et $t$ le temps après la première séparation. Avec $|\vec{m}|^2 = \tilde{\mu}^2 d$ et $\Gamma_t \approx 1$ pour $t$ grand, cela donne:
+
+\begin{align}
+|\vec{\varepsilon}|^2 = \frac{\Gamma_t}{\Gamma_{t_0}} \tilde{\mu}^2 d \approx \frac{\tilde{\mu}^2 d}{\Gamma_{t_0}}
+\end{align}
+
+Pour $t_0 = 0$, nous avons $\Gamma_{t_0} = \sigma^2$ (la variance initiale), ce qui donne:
+
+\begin{align}
+|\vec{\varepsilon}| = \tilde{\mu}\sqrt{\frac{d}{\sigma^2}}
+\end{align}
+
+Ce critère garantit que le modèle présente une autosimilarité parfaite, avec des séparations qui se produisent à des échelles successivement réduites, mais avec la même structure dynamique.
+
+\subsection{Vérifions numériquement}
+
+Pour vérifier cette autosimilarité, considérons le potentiel conditionnel pour un vecteur $\vec{x} = \vec{m} + q\vec{\varepsilon}$ où $q$ varie. Le potentiel conditionnel s'écrit:
+
+\begin{align}
+V^{\text{cond}+}(\vec{m} + q\vec{\varepsilon}, t) = \frac{1}{2}\frac{q^2|\vec{\varepsilon}|^2}{\Gamma_t} + C
+\end{align}
+
+Si nous ajoutons maintenant une perturbation $\vec{\alpha} = \alpha \frac{\vec{\varepsilon}}{|\vec{\varepsilon}|}$ avec $\alpha > 0$ et $\alpha < 0$, nous obtenons un potentiel de mélange gaussien à deux composantes:
+
+\begin{align}
+V^{\text{cond}2}(q) = -\log\left[e^{-\frac{(q-\alpha)^2|\vec{\varepsilon}|^2}{2\Gamma_t}} + e^{-\frac{(q+\alpha)^2|\vec{\varepsilon}|^2}{2\Gamma_t}}\right] + C'
+\end{align}
+
+Ce potentiel présente une structure à double puits lorsque:
+
+\begin{align}
+\frac{\alpha^2|\vec{\varepsilon}|^2}{\Gamma_t} > 1
+\end{align}
+
+Ce qui conduit à un nouveau temps critique $t_{s2}$ pour cette séparation secondaire:
+
+\begin{align}
+t_{s2} = \frac{1}{2}\log\left(\alpha^2|\vec{\varepsilon}|^2\right)
+\end{align}
+
+Si nous choisissons $|\vec{\varepsilon}| = \tilde{\mu}\sqrt{\frac{d}{\sigma^2}}$ et $\alpha = \sigma$, nous obtenons:
+
+\begin{align}
+t_{s2} = \frac{1}{2}\log\left(\sigma^2 \cdot \tilde{\mu}^2\frac{d}{\sigma^2}\right) = \frac{1}{2}\log\left(\tilde{\mu}^2 d\right) = t_s
+\end{align}
+
+Ainsi, le temps critique de la séparation secondaire est identique au temps critique de la séparation primaire, confirmant l'autosimilarité parfaite du système!
+
+\begin{figure}[h]
+    \centering
+    \caption{Comparaison des potentiels à différentes échelles montrant l'autosimilarité}
+    \label{fig:self_similarity}
+\end{figure}
+
+\subsection{Matrice jacobienne et structures hiérarchiques}
+
+Une autre manière d'analyser cette autosimilarité est d'examiner la matrice jacobienne du score $\nabla S(\vec{x})$. Pour le mélange gaussien, cette matrice est:
+
+\begin{align}
+\nabla S(\vec{x}) = -\frac{1}{\Gamma_t}\mathbf{I} + \frac{e^{-2t}}{\Gamma_t^2}\vec{m}\vec{m}^T\left(1 - \tanh^2\left(\vec{x}\cdot\vec{m}\frac{e^{-t}}{\Gamma_t}\right)\right)
+\end{align}
+
+Cette matrice a des valeurs propres différentes selon les directions. Au temps critique $t_s$, la valeur propre dans la direction $\vec{m}$ s'annule, créant l'instabilité qui conduit à la séparation. Après conditionnement sur cette séparation, la jacobienne du score conditionnel dans le sous-espace orthogonal devient:
+
+\begin{align}
+\nabla S^{\text{cond}}(\vec{y}) = -\frac{1}{\Gamma_t}\mathbf{I}
+\end{align}
+
+Cette forme est identique à celle du score original à $t \gg t_s$, confirmant encore l'autosimilarité du système.
+
+\section{Analyse numérique du phénomène de double puits}
+
+Pour visualiser la formation du double puits et la hiérarchie des temps de séparation, nous pouvons étudier numériquement le potentiel $V(q,t)$ pour différentes valeurs de $t$ et différentes perturbations $\varepsilon$.
+
+\subsection{Visualisation du potentiel pour différentes valeurs de $t$}
+
+La figure \ref{fig:potential_evolution} illustre l'évolution du potentiel $V(q,t)$ en fonction du temps normalisé $t/t_s$. On observe clairement la transition d'un potentiel quadratique (pour $t \gg t_s$) à un potentiel à double puits (pour $t \ll t_s$).
+
+\begin{figure}[h]
+    \centering
+    \caption{Évolution du potentiel $V(q,t)$ en fonction du temps $t/t_s$}
+    \label{fig:potential_evolution}
+\end{figure}
+
+\subsection{Effet de la perturbation $\varepsilon$ sur le potentiel}
+
+Lorsque $\vec{\varepsilon}$ a une composante non nulle dans la direction de $\vec{m}$, l'asymétrie du potentiel devient visible. La figure \ref{fig:potential_asymmetry} montre le potentiel pour différentes valeurs de $\varepsilon_{\parallel}$.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \caption{$\varepsilon_{\parallel} = 0$}
+        \label{fig:eps_0}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \caption{$\varepsilon_{\parallel} = 0.1\tilde{\mu}\sqrt{d}$}
+        \label{fig:eps_pos}
+    \end{subfigure}
+    
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \caption{$\varepsilon_{\parallel} = -0.1\tilde{\mu}\sqrt{d}$}
+        \label{fig:eps_neg}
+    \end{subfigure}
+    \caption{Asymétrie du potentiel pour différentes valeurs de $\varepsilon_{\parallel}$ à $t = 0.8 t_s$}
+    \label{fig:potential_asymmetry}
+\end{figure}
+
+\subsection{Hiérarchie des temps critiques}
+
+En observant l'évolution de la courbure du potentiel autour des points $\pm \vec{m} \pm \vec{\varepsilon}$, on peut déterminer les temps critiques associés à chacun de ces points. La table \ref{tab:critical_times} présente ces temps pour différentes valeurs de $\varepsilon_{\parallel}$.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Point & Temps critique \\
+        \hline
+        $\vec{m} + \vec{\varepsilon}$ ($\varepsilon_{\parallel} > 0$) & $t_s - \Delta t^+$ \\
+        $\vec{m} - \vec{\varepsilon}$ ($\varepsilon_{\parallel} < 0$) & $t_s + \Delta t^-$ \\
+        $-\vec{m} + \vec{\varepsilon}$ ($\varepsilon_{\parallel} > 0$) & $t_s + \Delta t^+$ \\
+        $-\vec{m} - \vec{\varepsilon}$ ($\varepsilon_{\parallel} < 0$) & $t_s - \Delta t^-$ \\
+        \hline
+    \end{tabular}
+    \caption{Temps critiques pour les quatre points spéciaux}
+    \label{tab:critical_times}
+\end{table}
+
+où $\Delta t^{\pm} \propto \varepsilon_{\parallel}/\sqrt{d}$ représente le décalage temporel dû à l'asymétrie.
+
 \section{Conclusion}
 
 Nous avons calculé les probabilités, les scores et les potentiels associés aux quatre points $\vec{m} \pm \vec{\varepsilon}$ et $-\vec{m} \pm \vec{\varepsilon}$. Cette analyse montre clairement la transition de phase qui caractérise le modèle de diffusion: au temps critique $t_s$, le potentiel passe d'une forme quadratique à une structure de double puits, conduisant à la séparation des classes.
 
-Ce comportement illustre également pourquoi, en grande dimension, le temps critique de séparation $t_s$ est d'ordre $\frac{1}{2}\log d$, comme le montre l'analyse des valeurs propres de la matrice hessienne du potentiel.
+En introduisant la variable réduite $q = \vec{x} \cdot \vec{m} / \sqrt{d}$, nous avons obtenu une expression compacte du potentiel qui met en évidence son comportement en fonction du temps et de la dimension. L'analyse de l'effet des perturbations non orthogonales à $\vec{m}$ révèle une structure hiérarchique des temps critiques, créant une séquence de transitions au sein de chaque classe principale.
+
+Ce comportement hiérarchique illustre pourquoi, même en grande dimension, la dynamique du modèle de diffusion peut présenter des sous-structures complexes. La compréhension de ces phénomènes est essentielle pour optimiser l'utilisation des modèles de diffusion dans des applications pratiques.
 
 \end{document}
