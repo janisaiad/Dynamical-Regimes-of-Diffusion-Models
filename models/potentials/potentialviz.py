@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import matplotlib.animation as animation
 import matplotlib
+import tqdm
 matplotlib.use('Agg')
 
 def compute_potential_gpu(q: cp.ndarray, t: float, d: int, mu_tilde: float = 1.0) -> cp.ndarray:
@@ -47,7 +48,7 @@ def calculate_optimal_q_range(t: float, d: int, mu_tilde: float = 1.0) -> tuple:
 def create_potential_animation(d: int = 100, 
                              base_q_range: tuple = (-3, 3),
                              n_points: int = 1000,
-                             n_frames: int = 200,
+                             n_frames: int = 2000,
                              fps: int = 30,
                              adaptive_scaling: bool = True) -> None:
     """
@@ -142,7 +143,9 @@ def create_potential_animation(d: int = 100,
             minima_y = compute_potential_gpu(minima_points, t, d)
             minima_data = np.column_stack((cp.asnumpy(minima_points), cp.asnumpy(minima_y)))
             minima_scatter.set_offsets(minima_data)
-            minima_scatter.set_alpha(min(1.0, (t_switch-t)/(0.5*t_switch)))  # Apparition progressive
+            # Convertir la valeur CuPy en float Python pour éviter l'erreur TypeError
+            alpha_value = float(min(1.0, (t_switch-t)/(0.5*t_switch)))
+            minima_scatter.set_alpha(alpha_value)  # Apparition progressive
         else:
             minima_scatter.set_offsets(np.empty((0, 2)))
             
@@ -167,6 +170,6 @@ def create_potential_animation(d: int = 100,
 
 if __name__ == "__main__":
     # Générer des animations pour différentes dimensions avec mise à l'échelle adaptative
-    for d in [10, 100, 500]:
+    for d in tqdm.tqdm(range(10, 1000, 10)):
         create_potential_animation(d=d, adaptive_scaling=True)
         print(f"Animation créée pour d={d} avec mise à l'échelle adaptative")
