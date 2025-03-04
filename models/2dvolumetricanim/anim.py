@@ -15,7 +15,6 @@ import matplotlib.animation as animation
 
 # Configuration globale
 CONFIG = {
-    "n_samples": 10000,    # Nombre d'échantillons
     "dim": 100,            # Dimension de l'espace
     "sigma": 1.0,          # Écart-type du bruit gaussien
     "device": 0,           # ID du GPU à utiliser
@@ -26,7 +25,6 @@ CONFIG = {
 @dataclass
 class DiffusionConfig:
     """Configuration pour l'analyse volumétrique de diffusion."""
-    n_samples: int
     dim: int
     sigma: float = 1.0
     device: int = 0
@@ -37,7 +35,6 @@ class DiffusionConfig:
     @classmethod
     def from_dict(cls, config_dict):
         return cls(
-            n_samples=config_dict["n_samples"],
             dim=config_dict["dim"],
             sigma=config_dict["sigma"],
             device=config_dict["device"],
@@ -47,7 +44,6 @@ class DiffusionConfig:
 
     def to_dict(self):
         return {
-            "n_samples": self.n_samples,
             "dim": self.dim,
             "sigma": self.sigma,
             "device": self.device,
@@ -76,10 +72,8 @@ class DiffusionVolumeAnalysis:
             self.logger.error(f"Erreur lors de l'initialisation du GPU: {e}")
             raise
             
-        self.n = config.n_samples
         self.d = config.dim
         self.sigma = config.sigma
-        self.alpha = np.log(config.n_samples) / config.dim
         
     def _setup_logger(self) -> logging.Logger:
         """Configure le logger pour l'analyse."""
@@ -115,25 +109,6 @@ class DiffusionVolumeAnalysis:
             
         return logger
         
-    def generate_training_data(self) -> cp.ndarray:
-        """
-        Génère des données d'entraînement synthétiques normalisées.
-        
-        Returns:
-            cp.ndarray: Données générées de forme (n_samples, dim)
-        """
-        self.logger.info("Génération des données d'entraînement...")
-        
-        # Génère des clusters gaussiens
-        self.data = cp.random.normal(0, 1, (self.n, self.d))
-        
-        # Normalisation pour avoir |x|^2 ~ d
-        norms = cp.sqrt(cp.sum(self.data**2, axis=1, keepdims=True))
-        self.data = self.data * cp.sqrt(self.d) / norms
-        
-        self.logger.info(f"Données générées: forme {self.data.shape}")
-        return self.data
-    
     def compute_delta_t(self, t: float) -> cp.ndarray:
         """
         Calcule Δ_t = 1 - exp(-2t).
@@ -158,9 +133,9 @@ class DiffusionVolumeAnalysis:
         """
         delta_t = self.compute_delta_t(t)
         
-        # Volume empirique (M^e)
+        # Volume empirique (M^e) - calculé exactement pour la gaussienne
         S_G = (self.d/2) * (1 + cp.log(2 * cp.pi * delta_t))
-        v_emp = cp.log(self.n) + S_G
+        v_emp = S_G
         
         # Volume population (M)
         s_t = (self.d/2) * (1 + cp.log(2 * cp.pi * (delta_t + self.sigma**2)))
@@ -197,9 +172,6 @@ class DiffusionVolumeAnalysis:
     
     def analyze_and_save(self):
         """Effectue l'analyse complète et sauvegarde les résultats."""
-        # Génère les données
-        self.generate_training_data()
-        
         # Trouve t_C
         t_c = self.find_collapse_time()
         
