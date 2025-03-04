@@ -1,0 +1,233 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8
+
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{whale}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{physics}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% Color definitions
+\definecolor{myblue}{RGB}{0,114,178}
+\definecolor{myred}{RGB}{213,94,0}
+\definecolor{mygreen}{RGB}{0,158,115}
+
+\title{Dynamic Regimes of Diffusion Models}
+\subtitle{A Volumetric and Temporal Analysis}
+\author{Scientific Presentation}
+\institute{Research Laboratory}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}{Context and Motivation}
+    \begin{itemize}
+        \item Diffusion models have become essential in image generation
+        \item Understanding their dynamics is crucial for optimizing their performance
+        \item Key questions:
+        \begin{itemize}
+            \item How do distributions evolve during the diffusion process?
+            \item What are the critical regimes that define their behavior?
+            \item How to determine optimal stopping times?
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Theoretical Foundations}
+    \begin{itemize}
+        \item Diffusion equation:
+        \begin{equation}
+            dx_t = -\frac{1}{2}\beta_t x_t dt + \sqrt{\beta_t} dW_t
+        \end{equation}
+        
+        \item Empirical score hypothesis:
+        \begin{equation}
+            \nabla \log p_t(x) \approx \hat{\nabla} \log p_t(x)
+        \end{equation}
+        
+        \item Two main critical times:
+        \begin{itemize}
+            \item $t_c$ : critical time of volumetric collapse
+            \item $t_s$ : critical time of class separation
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Volumetric Analysis}
+
+\begin{frame}{The Volumetric Argument}
+    \begin{itemize}
+        \item Beyond the "exact empirical score" hypothesis
+        \item Allows quantitative analysis of how collapse depends on:
+        \begin{itemize}
+            \item $n$ : number of samples
+            \item $d$ : data dimension
+            \item Capacity of the model used to learn the score
+        \end{itemize}
+        \item Expression of critical collapse time:
+        \begin{equation}
+            t_c \sim \log\left(\frac{n}{d}\right)
+        \end{equation}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamics on Manifolds}
+    \begin{itemize}
+        \item Real data often lies on low-dimensional manifolds
+        \item For a manifold of intrinsic dimension $d_{int} \ll d$:
+        \begin{equation}
+            t_c \sim \log\left(\frac{n}{d_{int}}\right)
+        \end{equation}
+        \item Important implications for learning and generation
+        \item Allows defining a stopping strategy even if $t_c$ is large
+    \end{itemize}
+\end{frame}
+
+\section{Critical Times}
+
+\begin{frame}{Critical Collapse Time ($t_c$)}
+    \begin{itemize}
+        \item Calculated using the volumetric argument
+        \item Represents when the distribution becomes too concentrated
+        \item Strongly depends on the samples/dimension ratio
+        \item Empirical formula:
+        \begin{equation}
+            t_c \approx \log\left(\frac{n \cdot \sigma^2}{d}\right)
+        \end{equation}
+        where $\sigma^2$ is the data variance
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Critical Separation Time ($t_s$)}
+    \begin{itemize}
+        \item Calculated using the empirical covariance matrix
+        \item Represents when classes begin to mix
+        \item For multimodal distributions (e.g., multiple classes)
+        \item Possible hierarchical structure (MNIST: different $t_s$ between digits)
+        \item Can be estimated by:
+        \begin{equation}
+            t_s \approx \log\left(\frac{\Delta\mu^2}{\sigma^2}\right)
+        \end{equation}
+        where $\Delta\mu$ is the distance between class means
+    \end{itemize}
+\end{frame}
+
+\section{Experiments and Results}
+
+\begin{frame}{Experimental Methodology}
+    \begin{itemize}
+        \item Analysis of synthetic manifolds
+        \item Tests on MNIST to calculate $t_c$ and $t_s$
+        \item Study of dimension $d$ effect
+        \item Exploration of multidimensional potentials
+        \item Comparisons with flow matching
+        \item Visualization of diffusion regimes
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Results on Synthetic Data}
+    \begin{itemize}
+        \item Multi-well potentials
+        \item In 1D: clear observation of two critical times
+        \item In higher dimensions: behavior consistent with theoretical predictions
+        \item Confirmation of the relation $t_c \sim \log(n/d)$
+        \item For synthetic manifolds: critical time depends on intrinsic dimension
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Results on MNIST}
+    \begin{itemize}
+        \item Intrinsic dimension estimated by non-parametric methods (UMAP, t-SNE)
+        \item Hierarchical structure of $t_s$ between different digits
+        \item Some digit pairs mix faster (e.g., 1-7)
+        \item Calculation of $t_c$ consistent with volumetric formula
+        \item Possibility to stop the process before $t_c$ due to low intrinsic dimension
+    \end{itemize}
+\end{frame}
+
+\section{Future Developments}
+
+\begin{frame}{Beyond Exact Empirical Score}
+    \begin{itemize}
+        \item The volumetric argument works even if the score isn't exact
+        \item Several approaches to improve generation:
+        \begin{itemize}
+            \item Deconvolution with image noise addition
+            \item Manifold interpolation
+            \item Ensemble training to mitigate negative effects
+            \item Score regularization
+            \item Use of high learning rates
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Regularization and Improvement}
+    \begin{itemize}
+        \item A poorly learned but regularized score can reduce collapse
+        \item Quantitative study of regularization role
+        \item Flow matching: verify if it presents the same phenomena (cusps)
+        \item Non-parametric identification of critical zones during training
+        \item Tests on multi-layer synthetic manifolds
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Practical Applications}
+    \begin{itemize}
+        \item Calculation of $t_c$ and $t_s$ for any new dataset
+        \item Use of pre-trained models (HuggingFace)
+        \item Consistency verification on various datasets
+        \item Hierarchical speciation between classes
+        \item Optimization of stopping times for generation
+    \end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Summary of Contributions}
+    \begin{itemize}
+        \item Characterization of dynamic regimes in diffusion models
+        \item Identification and quantification of critical times $t_c$ and $t_s$
+        \item Validation on synthetic and real data (MNIST)
+        \item Volumetric argument applicable beyond empirical score hypothesis
+        \item Deep understanding of model behavior based on $n$ and $d$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Perspectives}
+    \begin{itemize}
+        \item In-depth study of regularization methods
+        \item Generalization to other generative model architectures
+        \item Applications beyond computer vision
+        \item Optimization of stopping strategies for different data types
+        \item Open-source implementation of critical time calculation methods
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \LARGE Thank you for your attention!
+    
+    \vspace{1cm}
+    
+    \large Questions?
+\end{frame}
+
+\end{document}

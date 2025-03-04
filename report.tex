@@ -1,0 +1,249 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage{physics}
+
+\title{Calcul des Probabilités et Potentiels pour les Régimes Dynamiques des Modèles de Diffusion}
+\author{Analyse Mathématique}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Dans ce rapport, nous allons analyser le comportement des modèles de diffusion en calculant les probabilités et les potentiels associés à quatre points spécifiques. Cette analyse permettra de mieux comprendre les régimes dynamiques et les transitions critiques qui caractérisent ces modèles, notamment les temps de séparation ($t_s$) et de collapse ($t_c$).
+
+\section{Définition du problème}
+
+Considérons un modèle de mélange gaussien à deux composantes en dimension $d$, avec des centres situés à $\pm \vec{m}$ où $\vec{m} = \tilde{\mu}\sqrt{d}$. Nous souhaitons analyser le comportement de la distribution et du score en quatre points particuliers:
+\begin{align}
+\vec{x}_1 &= \vec{m} - \vec{\varepsilon} \\
+\vec{x}_2 &= \vec{m} + \vec{\varepsilon} \\
+\vec{x}_3 &= -\vec{m} - \vec{\varepsilon} \\
+\vec{x}_4 &= -\vec{m} + \vec{\varepsilon}
+\end{align}
+
+où $\vec{\varepsilon}$ est un petit vecteur, typiquement orthogonal à $\vec{m}$.
+
+\section{Calcul des probabilités}
+
+Pour le modèle de mélange gaussien, la distribution à l'instant $t$ est donnée par:
+\begin{align}
+P_t(\vec{x}) = \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-(\vec{x}-\vec{m} e^{-t})^2/(2 \Gamma_t)}
++e^{-(\vec{x}+\vec{m} e^{-t})^2/(2 \Gamma_t)}
+\right]
+\end{align}
+
+où $\Gamma_t=\sigma^2 e^{-2t} + \Delta_t$ et $\Delta_t = 1-e^{-2t}$.
+
+\subsection{Probabilités aux quatre points}
+
+Calculons maintenant $P_t(\vec{x})$ pour chacun des quatre points:
+
+\subsubsection{Calcul pour $\vec{x}_1 = \vec{m} - \vec{\varepsilon}$}
+
+\begin{align}
+P_t(\vec{x}_1) &= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-((\vec{m}-\vec{\varepsilon})-\vec{m} e^{-t})^2/(2 \Gamma_t)}
++e^{-((\vec{m}-\vec{\varepsilon})+\vec{m} e^{-t})^2/(2 \Gamma_t)}
+\right] \\
+&= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-(\vec{m}(1-e^{-t})-\vec{\varepsilon})^2/(2 \Gamma_t)}
++e^{-(\vec{m}(1+e^{-t})-\vec{\varepsilon})^2/(2 \Gamma_t)}
+\right]
+\end{align}
+
+Pour simplifier, notons:
+\begin{align}
+A_1 &= (\vec{m}(1-e^{-t})-\vec{\varepsilon})^2 \\
+B_1 &= (\vec{m}(1+e^{-t})-\vec{\varepsilon})^2
+\end{align}
+
+\subsubsection{Calcul pour $\vec{x}_2 = \vec{m} + \vec{\varepsilon}$}
+
+\begin{align}
+P_t(\vec{x}_2) &= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-((\vec{m}+\vec{\varepsilon})-\vec{m} e^{-t})^2/(2 \Gamma_t)}
++e^{-((\vec{m}+\vec{\varepsilon})+\vec{m} e^{-t})^2/(2 \Gamma_t)}
+\right] \\
+&= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-(\vec{m}(1-e^{-t})+\vec{\varepsilon})^2/(2 \Gamma_t)}
++e^{-(\vec{m}(1+e^{-t})+\vec{\varepsilon})^2/(2 \Gamma_t)}
+\right]
+\end{align}
+
+Nous notons:
+\begin{align}
+A_2 &= (\vec{m}(1-e^{-t})+\vec{\varepsilon})^2 \\
+B_2 &= (\vec{m}(1+e^{-t})+\vec{\varepsilon})^2
+\end{align}
+
+\subsubsection{Calcul pour $\vec{x}_3 = -\vec{m} - \vec{\varepsilon}$}
+
+\begin{align}
+P_t(\vec{x}_3) &= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-((-\vec{m}-\vec{\varepsilon})-\vec{m} e^{-t})^2/(2 \Gamma_t)}
++e^{-((-\vec{m}-\vec{\varepsilon})+\vec{m} e^{-t})^2/(2 \Gamma_t)}
+\right] \\
+&= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-(-\vec{m}(1+e^{-t})-\vec{\varepsilon})^2/(2 \Gamma_t)}
++e^{-(-\vec{m}(1-e^{-t})-\vec{\varepsilon})^2/(2 \Gamma_t)}
+\right]
+\end{align}
+
+Nous notons:
+\begin{align}
+A_3 &= (-\vec{m}(1+e^{-t})-\vec{\varepsilon})^2 \\
+B_3 &= (-\vec{m}(1-e^{-t})-\vec{\varepsilon})^2
+\end{align}
+
+\subsubsection{Calcul pour $\vec{x}_4 = -\vec{m} + \vec{\varepsilon}$}
+
+\begin{align}
+P_t(\vec{x}_4) &= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-((-\vec{m}+\vec{\varepsilon})-\vec{m} e^{-t})^2/(2 \Gamma_t)}
++e^{-((-\vec{m}+\vec{\varepsilon})+\vec{m} e^{-t})^2/(2 \Gamma_t)}
+\right] \\
+&= \frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left[
+e^{-(-\vec{m}(1+e^{-t})+\vec{\varepsilon})^2/(2 \Gamma_t)}
++e^{-(-\vec{m}(1-e^{-t})+\vec{\varepsilon})^2/(2 \Gamma_t)}
+\right]
+\end{align}
+
+Nous notons:
+\begin{align}
+A_4 &= (-\vec{m}(1+e^{-t})+\vec{\varepsilon})^2 \\
+B_4 &= (-\vec{m}(1-e^{-t})+\vec{\varepsilon})^2
+\end{align}
+
+\section{Calcul du score}
+
+Le score du modèle de mélange gaussien est donné par:
+\begin{align}
+S_i(\vec{x}) = -\frac{x_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( \vec{x} \cdot \vec{m} \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+Calculons maintenant le score pour chacun des quatre points.
+
+\subsection{Score au point $\vec{x}_1 = \vec{m} - \vec{\varepsilon}$}
+
+\begin{align}
+S_i(\vec{x}_1) &= -\frac{(m_i - \varepsilon_i)}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (\vec{m} - \vec{\varepsilon}) \cdot \vec{m} \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= -\frac{m_i - \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (|\vec{m}|^2 - \vec{\varepsilon} \cdot \vec{m}) \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+Si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$, alors $\vec{\varepsilon} \cdot \vec{m} = 0$ et:
+\begin{align}
+S_i(\vec{x}_1) &= -\frac{m_i - \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( |\vec{m}|^2 \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= -\frac{m_i - \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( \tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+\subsection{Score au point $\vec{x}_2 = \vec{m} + \vec{\varepsilon}$}
+
+\begin{align}
+S_i(\vec{x}_2) &= -\frac{(m_i + \varepsilon_i)}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (\vec{m} + \vec{\varepsilon}) \cdot \vec{m} \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= -\frac{m_i + \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (|\vec{m}|^2 + \vec{\varepsilon} \cdot \vec{m}) \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+Si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$:
+\begin{align}
+S_i(\vec{x}_2) &= -\frac{m_i + \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( \tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+\subsection{Score au point $\vec{x}_3 = -\vec{m} - \vec{\varepsilon}$}
+
+\begin{align}
+S_i(\vec{x}_3) &= -\frac{(-m_i - \varepsilon_i)}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (-\vec{m} - \vec{\varepsilon}) \cdot \vec{m} \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= \frac{m_i + \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (-|\vec{m}|^2 - \vec{\varepsilon} \cdot \vec{m}) \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+Si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$:
+\begin{align}
+S_i(\vec{x}_3) &= \frac{m_i + \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( -\tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= \frac{m_i + \varepsilon_i}{\Gamma_t}-m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( \tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+\subsection{Score au point $\vec{x}_4 = -\vec{m} + \vec{\varepsilon}$}
+
+\begin{align}
+S_i(\vec{x}_4) &= -\frac{(-m_i + \varepsilon_i)}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (-\vec{m} + \vec{\varepsilon}) \cdot \vec{m} \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= \frac{m_i - \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( (-|\vec{m}|^2 + \vec{\varepsilon} \cdot \vec{m}) \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+Si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$:
+\begin{align}
+S_i(\vec{x}_4) &= \frac{m_i - \varepsilon_i}{\Gamma_t}+m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( -\tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right) \\
+&= \frac{m_i - \varepsilon_i}{\Gamma_t}-m_i \frac{e^{-t}}{\Gamma_t}\tanh\left( \tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right)
+\end{align}
+
+\section{Calcul du potentiel}
+
+Le potentiel peut être calculé à partir du score par la relation:
+\begin{align}
+V(\vec{x}, t) = \frac{1}{2}\sum_i x_i^2 - 2\log P_t(\vec{x})
+\end{align}
+
+\subsection{Potentiel au point $\vec{x}_1 = \vec{m} - \vec{\varepsilon}$}
+
+\begin{align}
+V(\vec{x}_1, t) &= \frac{1}{2}|\vec{m} - \vec{\varepsilon}|^2 - 2\log P_t(\vec{x}_1) \\
+&= \frac{1}{2}(|\vec{m}|^2 - 2\vec{m}\cdot\vec{\varepsilon} + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_1/(2\Gamma_t)} + e^{-B_1/(2\Gamma_t)}\right)\right] \\
+&= \frac{1}{2}(|\vec{m}|^2 + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_1/(2\Gamma_t)} + e^{-B_1/(2\Gamma_t)}\right)\right]
+\end{align}
+
+si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$.
+
+\subsection{Potentiel au point $\vec{x}_2 = \vec{m} + \vec{\varepsilon}$}
+
+\begin{align}
+V(\vec{x}_2, t) &= \frac{1}{2}|\vec{m} + \vec{\varepsilon}|^2 - 2\log P_t(\vec{x}_2) \\
+&= \frac{1}{2}(|\vec{m}|^2 + 2\vec{m}\cdot\vec{\varepsilon} + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_2/(2\Gamma_t)} + e^{-B_2/(2\Gamma_t)}\right)\right] \\
+&= \frac{1}{2}(|\vec{m}|^2 + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_2/(2\Gamma_t)} + e^{-B_2/(2\Gamma_t)}\right)\right]
+\end{align}
+
+si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$.
+
+\subsection{Potentiel au point $\vec{x}_3 = -\vec{m} - \vec{\varepsilon}$}
+
+\begin{align}
+V(\vec{x}_3, t) &= \frac{1}{2}|-\vec{m} - \vec{\varepsilon}|^2 - 2\log P_t(\vec{x}_3) \\
+&= \frac{1}{2}(|\vec{m}|^2 + 2\vec{m}\cdot\vec{\varepsilon} + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_3/(2\Gamma_t)} + e^{-B_3/(2\Gamma_t)}\right)\right] \\
+&= \frac{1}{2}(|\vec{m}|^2 + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_3/(2\Gamma_t)} + e^{-B_3/(2\Gamma_t)}\right)\right]
+\end{align}
+
+si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$.
+
+\subsection{Potentiel au point $\vec{x}_4 = -\vec{m} + \vec{\varepsilon}$}
+
+\begin{align}
+V(\vec{x}_4, t) &= \frac{1}{2}|-\vec{m} + \vec{\varepsilon}|^2 - 2\log P_t(\vec{x}_4) \\
+&= \frac{1}{2}(|\vec{m}|^2 - 2\vec{m}\cdot\vec{\varepsilon} + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_4/(2\Gamma_t)} + e^{-B_4/(2\Gamma_t)}\right)\right] \\
+&= \frac{1}{2}(|\vec{m}|^2 + |\vec{\varepsilon}|^2) - 2\log\left[\frac{1}{2\sqrt{2\pi\Gamma_t}^d}\left(e^{-A_4/(2\Gamma_t)} + e^{-B_4/(2\Gamma_t)}\right)\right]
+\end{align}
+
+si $\vec{\varepsilon}$ est orthogonal à $\vec{m}$.
+
+\section{Analyse du potentiel au temps critique}
+
+Au temps critique de séparation $t_s \approx \frac{1}{2}\log d$, le potentiel développe une structure à double puits. Examinons cela en regardant le comportement du potentiel autour de chaque région.
+
+Pour $t \gg t_s$, nous avons $\tanh\left(\tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right) \approx \tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}$ (car l'argument est petit), et le potentiel est essentiellement quadratique.
+
+Pour $t \ll t_s$, nous avons $\tanh\left(\tilde{\mu}^2 d \, \frac{e^{-t}}{\Gamma_t}\right) \approx \text{sign}(\tilde{\mu}^2 d) = 1$ (car l'argument est grand), et le potentiel a une structure à deux puits.
+
+La transition entre ces deux régimes se produit précisément lorsque $t \approx t_s$. À ce moment, les variances du potentiel autour des points $\pm \vec{m}$ deviennent négatives, conduisant à la bifurcation caractéristique de ce système.
+
+\section{Conclusion}
+
+Nous avons calculé les probabilités, les scores et les potentiels associés aux quatre points $\vec{m} \pm \vec{\varepsilon}$ et $-\vec{m} \pm \vec{\varepsilon}$. Cette analyse montre clairement la transition de phase qui caractérise le modèle de diffusion: au temps critique $t_s$, le potentiel passe d'une forme quadratique à une structure de double puits, conduisant à la séparation des classes.
+
+Ce comportement illustre également pourquoi, en grande dimension, le temps critique de séparation $t_s$ est d'ordre $\frac{1}{2}\log d$, comme le montre l'analyse des valeurs propres de la matrice hessienne du potentiel.
+
+\end{document} 
