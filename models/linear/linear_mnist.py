@@ -48,7 +48,6 @@ T = 200  # Increased number of frames
 # Create timesteps in log space from 1e-3 to 2
 timesteps = torch.exp(torch.linspace(np.log(1e-3), np.log(2), T))
 
-# Calculate P_t_e and entropy
 def compute_P_t_e(x, data, t):
     """Compute P_t_e according to equation (2) in paper"""
     n = len(data)
@@ -57,8 +56,13 @@ def compute_P_t_e(x, data, t):
     P_t_e = torch.mean(torch.exp(-torch.sum(diff**2, dim=1)/(2*Delta_t))) / ((2*np.pi*Delta_t)**(x.shape[0]/2))
     return P_t_e
 
-def compute_entropy(data, t, n_samples=10000):
-    """Compute entropy of P_t_e by Monte Carlo sampling"""
+def compute_gaussian_entropy(t):
+    """Compute entropy of a standard Gaussian"""
+    d = X_pca.shape[1]  # Dimension of data
+    return d/2 * (1 + np.log(2*np.pi))
+
+def compute_entropy_and_excess(data, t, n_samples=10000):
+    """Compute entropy of P_t_e and excess entropy by Monte Carlo sampling"""
     Delta_t = 1 - torch.exp(-2*t)
     # Sample points from noisy distribution
     samples = torch.randn(n_samples, data.shape[1]) * torch.sqrt(Delta_t) + \
@@ -70,22 +74,40 @@ def compute_entropy(data, t, n_samples=10000):
         p = compute_P_t_e(x, data, t)
         if p > 0:
             entropy -= (1/n_samples) * torch.log(p)
-    return entropy.item()
+            
+    # Compute excess entropy f(t) = s(t) - s_G(t)
+    gaussian_entropy = compute_gaussian_entropy(t)
+    excess_entropy = entropy.item() - gaussian_entropy
+    
+    return entropy.item(), excess_entropy
 
-# Calculate entropy over time
+# Calculate entropy and excess entropy over time
 entropies = []
+excess_entropies = []
 for t in tqdm(timesteps):
-    entropy = compute_entropy(X_pca, t)
+    entropy, excess = compute_entropy_and_excess(X_pca, t)
     entropies.append(entropy)
+    excess_entropies.append(excess)
 
-# Plot entropy with log scale x-axis
-plt.figure(figsize=(8, 6))
-plt.semilogx(timesteps, entropies)
-plt.xlabel('Time t (log scale)')
-plt.ylabel('Entropy')
-plt.title('Entropy of P_t_e over time')
-plt.grid(True)
-plt.savefig('results/MNIST/entropy.png')
+# Plot entropy and excess entropy with log scale x-axis
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+
+ax1.semilogx(timesteps, entropies, label='Total entropy s(t)')
+ax1.semilogx(timesteps, [compute_gaussian_entropy(t) for t in timesteps], '--', label='Gaussian entropy')
+ax1.set_xlabel('Time t (log scale)')
+ax1.set_ylabel('Entropy')
+ax1.set_title('Total and Gaussian entropy over time')
+ax1.grid(True)
+ax1.legend()
+
+ax2.semilogx(timesteps, excess_entropies)
+ax2.set_xlabel('Time t (log scale)')
+ax2.set_ylabel('Excess entropy f(t)')
+ax2.set_title('Excess entropy over time')
+ax2.grid(True)
+
+plt.tight_layout()
+plt.savefig('results/MNIST/entropy_analysis.png')
 plt.close()
 
 # Setup the diffusion animation figure
@@ -96,12 +118,12 @@ scatter = ax1.scatter([], [], alpha=0.5)
 ax1.set_xlim(X_pca[:, 0].min() - 1, X_pca[:, 0].max() + 1)
 ax1.set_ylim(X_pca[:, 1].min() - 1, X_pca[:, 1].max() + 1)
 
-# Initialize entropy plot with log scale x-axis
+# Initialize excess entropy plot with log scale x-axis
 line, = ax2.semilogx([], [])
 ax2.set_xlim(1e-3, 2)
-ax2.set_ylim(min(entropies), max(entropies))
+ax2.set_ylim(min(excess_entropies), max(excess_entropies))
 ax2.set_xlabel('Time t (log scale)')
-ax2.set_ylabel('Entropy')
+ax2.set_ylabel('Excess entropy f(t)')
 ax2.grid(True)
 
 def update(frame):
@@ -113,8 +135,8 @@ def update(frame):
     scatter.set_offsets(noisy_data.numpy())
     ax1.set_title(f't = {t:.3e}')
     
-    # Update entropy plot
-    line.set_data(timesteps[:frame+1], entropies[:frame+1])
+    # Update excess entropy plot
+    line.set_data(timesteps[:frame+1], excess_entropies[:frame+1])
     
     return scatter, line
 
@@ -122,5 +144,5 @@ def update(frame):
 anim = FuncAnimation(fig, update, frames=T, interval=50, blit=True)
 
 # Save animation
-anim.save('results/MNIST/diffusion_and_entropy.gif', writer='pillow')
+anim.save('results/MNIST/diffusion_and_excess_entropy.gif', writer='pillow')
 plt.close()
