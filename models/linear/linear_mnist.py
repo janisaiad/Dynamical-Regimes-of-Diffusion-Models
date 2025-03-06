@@ -46,7 +46,7 @@ X_pca = torch.tensor(pca.fit_transform(X))  # Keep on CPU initially
 # Animation parameters with more points and log space
 T = 200  # Increased number of frames
 # Create timesteps in log space from 1e-3 to 2
-timesteps = torch.exp(torch.linspace(np.log(1e-3), np.log(2), T))
+timesteps = torch.exp(torch.linspace(np.log(1e-3), np.log(8), T))
 
 def compute_P_t_e(x, data, t):
     """Compute P_t_e according to equation (2) in paper"""
