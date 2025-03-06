@@ -11,6 +11,7 @@ Requires-Dist: matplotlib>=3.9.4
 Requires-Dist: numba>=0.60.0
 Requires-Dist: numpy>=2.0.2
 Requires-Dist: pytest>=8.3.4
+Requires-Dist: scikit-learn>=1.6.1
 Requires-Dist: scipy>=1.13.1
 Requires-Dist: torch>=2.5.1
 Requires-Dist: torchvision>=0.21.0
