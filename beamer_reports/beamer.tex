@@ -22,8 +22,8 @@
 
 \title{Dynamic Regimes of Diffusion Models}
 \subtitle{A Volumetric and Temporal Analysis}
-\author{Scientific Presentation}
-\institute{Research Laboratory}
+\author{EA Topics in ML}
+\institute{Ecole Polytechnique}
 \date{\today}
 
 \begin{document}
@@ -36,26 +36,43 @@
     \tableofcontents
 \end{frame}
 
+
+
 \section{Introduction}
 
-\begin{frame}{Context and Motivation}
+
+%% 30 s
+\begin{frame}{Example}
+    \begin{center}
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            \includegraphics[width=0.7\textwidth]{cars diffusion.gif}
+            \vspace{2cm}
+        }}
+    \end{center}
+\end{frame}
+
+
+%% 1 minute
+\begin{frame}{Motivation}
     \begin{itemize}
-        \item Diffusion models have become essential in image generation
-        \item Understanding their dynamics is crucial for optimizing their performance
-        \item Key questions:
+        \item Key questions :
         \begin{itemize}
-            \item How do distributions evolve during the diffusion process?
-            \item What are the critical regimes that define their behavior?
-            \item How to determine optimal stopping times?
+            \item Trends of process' distribution
+            \item Regimes and behavior for long times
+            \item How to determine optimal beginning/stopping times?
         \end{itemize}
     \end{itemize}
 \end{frame}
 
+
+%% 30 s
 \begin{frame}{Theoretical Foundations}
     \begin{itemize}
         \item Diffusion equation:
         \begin{equation}
-            dx_t = -\frac{1}{2}\beta_t x_t dt + \sqrt{\beta_t} dW_t
+            dx_t = -\frac{1}{2} x_t dt + \sqrt{2} dW_t
         \end{equation}
         
         \item Exact score hypothesis:
@@ -67,25 +84,48 @@
         \begin{equation}
             d \gg 1 \text{ (typically } 10^3-10^4\text{)}
         \end{equation}
-        
-        \item Defines a stopping strategy even with large $t_c$
+    \end{itemize}
+\end{frame}
+
+
+
+%% 30 s
+\begin{frame}{Goal}
+
+    
+    \begin{itemize}
+        \item n (say 100) images from a huge dataset
         \item Two main critical times:
         \begin{itemize}
-            \item $t_c$: critical time for image selection
-            \item $t_s$: critical time for class separation (gender, lighting)
+            \item $t_s$: Critical time for class separation (gender, lighting ...)
+            \item $t_c$: Critical time for image selection
         \end{itemize}
     \end{itemize}
 \end{frame}
 
+
+
+
+
+
+
+
+
+
+
+\section{Speciation time : crafting your characteristics}
+
+%% 2 minute
 \begin{frame}{Critical Separation Time ($t_s$)}
     \begin{itemize}
-        \item Computed using the covariance matrix
+        \item Covariance C of dataset
         \item Represents when classes begin to mix
         \item Can be estimated by:
         \begin{equation}
-            t_s \approx \log\left(\frac{\Delta\mu^2}{\sigma^2}\right)
+            t_s \approx \frac{1}{2}\log(d)
         \end{equation}
-        where $\Delta\mu$ is the distance between class means
+        \item Simple dependence on dimension only
+        \item Independent of number of samples $n$
     \end{itemize}
     
     \begin{center}
@@ -98,35 +138,12 @@
     \end{center}
 \end{frame}
 
-\section{Critical Times}
-\begin{frame}{Critical Collapse Time ($t_c$)}
-    \begin{itemize}
-        \item Computed using volumetric argument
-        \item Represents when distribution becomes too concentrated
-        \item Strongly depends on samples/dimension ratio
-        \item Empirical formula:
-        \begin{equation}
-            t_c \approx \log\left(\frac{n \cdot \sigma^2}{d}\right)
-        \end{equation}
-        where $\sigma^2$ is data variance
-    \end{itemize}
-    
-    \begin{center}
-        \fbox{\parbox{0.8\textwidth}{
-            \centering
-            \vspace{2cm}
-            [Image: Collapse visualization]
-            \vspace{2cm}
-        }}
-    \end{center}
-\end{frame}
-
+%% 2 minute
 \begin{frame}{Results on Synthetic Data}
     \begin{itemize}
-        \item Multi-well potentials
-        \item In 1D: clear observation of two critical times
+        \item Multi-wall potentials
+        \item In 1D/2D: clear observation of 2 critical times
         \item In higher dimensions: behavior confirms theoretical predictions
-        \item Confirmation of relation $t_c \sim \log(n/d)$
     \end{itemize}
     
     \begin{center}
@@ -139,7 +156,9 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{Results on MNIST}
+
+%% 2 minute
+\begin{frame}{Results on MNIST, remarks}
     \begin{itemize}
         \item Hierarchical structure of $t_s$ between different digits
         \item Some digit pairs mix faster (e.g., 1-7)
@@ -147,12 +166,72 @@
     \end{itemize}
 \end{frame}
 
-\section{Volumetric Analysis}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Collapse time : avoid memorization}
+
+
+%% 1 minute
+\begin{frame}{Critical Collapse Time ($t_c$)}
+    \begin{itemize}
+
+        \item Represents when distribution becomes too concentrated
+        \item Strongly depends on samples/dimension ratio
+        \item Formula:
+        \begin{equation}
+            t_c \approx \frac{d}{\log n}
+        \end{equation}
+    \end{itemize}
+    
+    \begin{center}
+     Confirmation $t_c \sim \log(n/d)$
+    
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            [Image: Collapse visualization of stopping when near but not exactly on a 2D point]
+            \vspace{2cm}
+        }}
+    \end{center}
+\end{frame}
+
+
+
+%% 2 minute
+\begin{frame}{Critical Collapse Time ($t_c$)}
+\begin{itemize}
+    \item More data = more choice to memorize an image
+    \item Confirmation $t_c \sim \log(n/d)$
+\end{itemize}
+\begin{center}
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            [Image: Collapse visualization of stopping when near but not exactly on a 2D point]
+            \vspace{2cm}
+        }}
+    \end{center}
+\end{frame}
+
+
+%% 2 minute
 \begin{frame}{The Volumetric Argument}
     \begin{itemize}
-        \item Beyond the "exact empirical score" hypothesis
-        \item Allows quantitative analysis of how collapse depends on:
+        \item Main idea - use the curse of dimensionnality - mass concentrated not around a point
+    
+        \item Allow analysis without exact score depends on:
         \begin{itemize}
             \item $n$: number of samples
             \item $d$: data dimension
@@ -165,18 +244,43 @@
     \end{itemize}
 \end{frame}
 
-\section{Future Developments}
+%% 1 minute
+\begin{frame}{The Volumetric Argument}
+    
+    \begin{center}
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            [Image: MNIST class separation visualization]
+            \vspace{2cm}
+        }}
+    \end{center}
+\end{frame}
 
+
+
+
+
+
+
+
+
+
+\section{Conclusion and materials}
+%% 1 minute
 \begin{frame}{Regularization and Improvement}
     \begin{itemize}
         \item A poorly learned but regularized score can reduce collapse
         \item Quantitative study of regularization's role
         \item Flow matching: verify if it presents the same phenomena (cusps)
         \item Non-parametric identification of critical zones during training
-        \item Tests on multi-layer synthetic manifolds
+        \item very recent results on manifolds (D matters)
     \end{itemize}
 \end{frame}
 
+
+
+%% 1 minute
 \begin{frame}{Practical Applications}
     \begin{itemize}
         \item Calculation of $t_c$ and $t_s$ for any new dataset
@@ -185,24 +289,22 @@
 \end{frame}
 
 \section{Conclusion}
-
+%% 1 minute
 \begin{frame}{Summary of Contributions}
     \begin{itemize}
-        \item Characterization of dynamic regimes in diffusion models
-        \item Identification and quantification of critical times $t_c$ and $t_s$
-        \item Validation on synthetic and real data (MNIST)
         \item Volumetric argument applicable beyond the exact empirical score hypothesis
         \item Deep understanding of model behavior as a function of $n$ and $d$
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Future Directions}
+
+%% 1 minute
+\begin{frame}{Future Directions - Trendy subject}
     \begin{itemize}
-        \item Data hierarchy - distinguishing collapse/speciation
-        \item Hierarchical score analysis for different data types
-        \item Equivalent potential with 4 wells
-        \item Application: hierarchical clustering of datasets
-        \item Refined temporal schema
+        \item Data : hierarchy - distinguishing collapse/speciation
+        \item Goal : faster inference time
+        \item Timescale for score, 4 walls potential
+        \item Results : 
     \end{itemize}
     
     \begin{center}
@@ -215,6 +317,32 @@
     \end{center}
 \end{frame}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \begin{frame}
     \centering
     \LARGE Thank you for your attention!
@@ -222,6 +350,18 @@
     \vspace{1cm}
     
     \large Questions?
+
+    
+    \begin{center}
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            [Image: Best visualization from the paper in tikz]
+            \vspace{2cm}
+        }}
+    \end{center}
+
+        
 \end{frame}
 
 \end{document} 
