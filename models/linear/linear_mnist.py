@@ -120,7 +120,7 @@ ax1.set_ylim(X_pca[:, 1].min() - 1, X_pca[:, 1].max() + 1)
 
 # Initialize excess entropy plot with log scale x-axis
 line, = ax2.semilogx([], [])
-ax2.set_xlim(1e-3, 2)
+ax2.set_xlim(1e-3, 8)
 ax2.set_ylim(min(excess_entropies), max(excess_entropies))
 ax2.set_xlabel('Time t (log scale)')
 ax2.set_ylabel('Excess entropy f(t)')
