@@ -68,7 +68,7 @@
 
 
 %% 30 s
-\begin{frame}{Theoretical Foundations}
+\begin{frame}{Hypothesis Foundations}
     \begin{itemize}
         \item Diffusion equation:
         \begin{equation}
@@ -118,8 +118,8 @@
 %% 2 minute
 \begin{frame}{Critical Separation Time ($t_s$)}
     \begin{itemize}
-        \item Covariance C of dataset
-        \item Represents when classes begin to mix
+        \item Covariance C $\approx$ Cov(samples) = clusters infos
+        \item Represents when classes begin to appear
         \item Can be estimated by:
         \begin{equation}
             t_s \approx \frac{1}{2}\log(d)
@@ -160,10 +160,20 @@
 %% 2 minute
 \begin{frame}{Results on MNIST, remarks}
     \begin{itemize}
-        \item Hierarchical structure of $t_s$ between different digits
-        \item Some digit pairs mix faster (e.g., 1-7)
-        \item Calculation of $t_c$ consistent with volumetric formula
+        \item Spectral estimate of $t_s$ consistent with the dataset
+        \item Potential wall over classes = 
     \end{itemize}
+
+    
+    
+    \begin{center}
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            [Image: MNIST Linear accuracy as a function of time + theoretical predictions (with integral of erfc(x) + empirical potential given centroids ]
+            \vspace{2cm}
+        }}
+    \end{center}
 \end{frame}
 
 
@@ -189,19 +199,17 @@
 
         \item Represents when distribution becomes too concentrated
         \item Strongly depends on samples/dimension ratio
-        \item Formula:
+        \item When small:
         \begin{equation}
             t_c \approx \frac{d}{\log n}
         \end{equation}
     \end{itemize}
     
     \begin{center}
-     Confirmation $t_c \sim \log(n/d)$
-    
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            [Image: Collapse visualization of stopping when near but not exactly on a 2D point]
+            [Image: Collapse visualization of stopping between 2 images with CIFAR]
             \vspace{2cm}
         }}
     \end{center}
@@ -212,8 +220,7 @@
 %% 2 minute
 \begin{frame}{Critical Collapse Time ($t_c$)}
 \begin{itemize}
-    \item More data = more choice to memorize an image
-    \item Confirmation $t_c \sim \log(n/d)$
+    \item Intuition : more data = more choice to memorize an image !
 \end{itemize}
 \begin{center}
         \fbox{\parbox{0.8\textwidth}{
@@ -226,10 +233,10 @@
 \end{frame}
 
 
-%% 2 minute
+%% 1 minute
 \begin{frame}{The Volumetric Argument}
     \begin{itemize}
-        \item Main idea - use the curse of dimensionnality - mass concentrated not around a point
+        \item Main idea - use the curse of dimensionality - mass concentrated not around a point
     
         \item Allow analysis without exact score depends on:
         \begin{itemize}
@@ -237,10 +244,6 @@
             \item $d$: data dimension
             \item Capacity of the model used to learn the score
         \end{itemize}
-        \item Expression of critical collapse time:
-        \begin{equation}
-            t_c \sim \log\left(\frac{n}{d}\right)
-        \end{equation}
     \end{itemize}
 \end{frame}
 
@@ -251,7 +254,7 @@
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            [Image: MNIST class separation visualization]
+            [Image: MNIST 2 images separation visualization]
             \vspace{2cm}
         }}
     \end{center}
@@ -267,12 +270,10 @@
 
 
 \section{Conclusion and materials}
-%% 1 minute
+%% 30 s
 \begin{frame}{Regularization and Improvement}
     \begin{itemize}
-        \item A poorly learned but regularized score can reduce collapse
-        \item Quantitative study of regularization's role
-        \item Flow matching: verify if it presents the same phenomena (cusps)
+        \item Inexact score  = reduce collapse
         \item Non-parametric identification of critical zones during training
         \item very recent results on manifolds (D matters)
     \end{itemize}
@@ -280,7 +281,7 @@
 
 
 
-%% 1 minute
+%% 30 s
 \begin{frame}{Practical Applications}
     \begin{itemize}
         \item Calculation of $t_c$ and $t_s$ for any new dataset
@@ -288,7 +289,7 @@
     \end{itemize}
 \end{frame}
 
-\section{Conclusion}
+\section{What to remember}
 %% 1 minute
 \begin{frame}{Summary of Contributions}
     \begin{itemize}
@@ -299,19 +300,18 @@
 
 
 %% 1 minute
-\begin{frame}{Future Directions - Trendy subject}
+\begin{frame}{Future Directions - Very trendy subject}
     \begin{itemize}
         \item Data : hierarchy - distinguishing collapse/speciation
-        \item Goal : faster inference time
-        \item Timescale for score, 4 walls potential
-        \item Results : 
+        \item Autosimilar Timescale for score, 4 walls potential
+        \item Flow matching: verify if it presents the same phenomena (cusps)
     \end{itemize}
     
     \begin{center}
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            [Image: Hierarchical visualization]
+            [Image: Hierarchical visualization with hierarchical_tikz + calculations]
             \vspace{2cm}
         }}
     \end{center}
@@ -356,7 +356,7 @@
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            [Image: Best visualization from the paper in tikz]
+            [Image: Better viz from the paper in tikz, with true generated data]
             \vspace{2cm}
         }}
     \end{center}
