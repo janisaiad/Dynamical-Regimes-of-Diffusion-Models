@@ -171,7 +171,7 @@
         
         \item forwarding, we have 
         \begin{equation}
-            Cov(p_t^e(x)) = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
+            Cov(p_t^e(x)) = E_{x_i \sim p_t^e(x)} [(x_i - \bar{x})(x_i - \bar{x})^T]
         \end{equation}
         
         \item With data, can be estimated with :
@@ -179,12 +179,18 @@
             Cov(p_t^e(x)) = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
         \end{equation}
         
-        \item Can be estimated by:
+        \item In general, trend:
         \begin{equation}
             t_s \approx \frac{1}{2}\log(d)
         \end{equation}
     \end{itemize}
+\end{frame}
     
+
+\begin{frame}{Example curves in 1D/2D}
+    
+    \item Wall potentials - score along eigenvectors
+    \item In 1D/2D: clear observation of 2 critical times
     \begin{center}
         \fbox{\parbox{0.8\textwidth}{
             \centering
@@ -195,11 +201,11 @@
     \end{center}
 \end{frame}
 
+
+
 %% 2 minute
 \begin{frame}{Results on Synthetic Data}
     \begin{itemize}
-        \item Multi-wall potentials
-        \item In 1D/2D: clear observation of 2 critical times
         \item In higher dimensions: behavior confirms theoretical predictions
     \end{itemize}
     
@@ -215,10 +221,10 @@
 
 
 %% 2 minute
-\begin{frame}{Results on MNIST, remarks}
+\begin{frame}{Results on MNIST, materials}
     \begin{itemize}
         \item Spectral estimate of $t_s$ consistent with the dataset
-        \item Potential wall over classes = 
+        \item Potential wall clearly visible
     \end{itemize}
 
     
@@ -249,16 +255,37 @@
 
 \section{Collapse time : avoid memorization}
 
+\begin{frame}{Example gif}
+    \begin{itemize}
+    \end{itemize}
+    \begin{center}
+        \fbox{\parbox{0.8\textwidth}{
+            \centering
+            \vspace{2cm}
+            [Image: CIFAR 2 images separation visualization]
+            \vspace{2cm}
+        }}
+    \end{center}
+    \begin{itemize}
+        \item $t \leq t_c :$ distribution concentrated to training points = regurgitation
+        \item $t > t_c :$ distribution concentrated to circle around training points
+    \end{itemize}
+\end{frame}
+
 
 %% 1 minute
 \begin{frame}{Critical Collapse Time ($t_c$)}
     \begin{itemize}
-
-        \item Represents when distribution becomes too concentrated
-        \item Strongly depends on samples/dimension ratio
-        \item When small:
+        \item Idea : stop generation before $t_c$
+        \item Goal : get a "barycenter" between 2 near images
+        \item $p_t^e(x) \propto Z_1 + Z_{2:n}$ where:
+        \begin{itemize}
+            \item $Z_1 \simeq e^{-d/2}$ (large $d$ limit)
+            \item $Z_{2:n}$ concentrates on $e^{d\psi_+(t)}$ with $\psi_+(t)$ increasing in $t$ and $\alpha$
+        \end{itemize}
+        \item When $\alpha = \frac{\log n}{d}$ is small:
         \begin{equation}
-            t_c \approx \frac{d}{\log n}
+            t_c \approx \frac{1}{2}\log\left[1+\frac{\sigma^2}{n^{2/d}-1}\right] \approx \frac{d}{\log n}
         \end{equation}
     \end{itemize}
     
@@ -293,7 +320,7 @@
 %% 1 minute
 \begin{frame}{The Volumetric Argument}
     \begin{itemize}
-        \item Main idea - use the curse of dimensionality - mass concentrated not around a point
+        \item Main idea - use the curse of dimensionality - mass concentrated not around a point to avoid collapsing
     
         \item Allow analysis without exact score depends on:
         \begin{itemize}
@@ -311,7 +338,7 @@
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            [Image: MNIST 2 images separation visualization]
+            [Image: MNIST or CIFAR 2 images separation visualization]
             \vspace{2cm}
         }}
     \end{center}
@@ -326,29 +353,15 @@
 
 
 
-\section{Conclusion and materials}
-%% 30 s
-\begin{frame}{Regularization and Improvement}
-    \begin{itemize}
-        \item Inexact score  = reduce collapse
-        \item Non-parametric identification of critical zones during training
-        \item very recent results on manifolds (D matters)
-    \end{itemize}
-\end{frame}
+\section{Conclusion and what to remember}
 
-
-
-%% 30 s
-\begin{frame}{Practical Applications}
-    \begin{itemize}
-        \item Calculation of $t_c$ and $t_s$ for any new dataset
-        \item Fast inference of pre-trained models (HuggingFace)
-    \end{itemize}
-\end{frame}
-
-\section{What to remember}
 %% 1 minute
-\begin{frame}{Summary of Contributions}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item Theory : You can calculate $t_c$ and $t_s$ for any new dataset, get a good time scheme
+        \item Practice : Faster generation after training (HuggingFace)
+    \end{itemize}
+
     \begin{itemize}
         \item Volumetric argument applicable beyond the exact empirical score hypothesis
         \item Deep understanding of model behavior as a function of $n$ and $d$
@@ -361,14 +374,16 @@
     \begin{itemize}
         \item Data : hierarchy - distinguishing collapse/speciation
         \item Autosimilar Timescale for score, 4 walls potential
-        \item Flow matching: verify if it presents the same phenomena (cusps)
+        \item Flow matching - same phenomena (cusps)
+        \item Inexact score  = reduce collapse
+        \item very recent results (1 months) on manifolds ($t_c = \frac{d_{manifold}}{\log(n)}$)
     \end{itemize}
     
     \begin{center}
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            [Image: Hierarchical visualization with hierarchical_tikz + calculations]
+            [Image: Hierarchical visualization with hierarchical tikz + calculations]
             \vspace{2cm}
         }}
     \end{center}
