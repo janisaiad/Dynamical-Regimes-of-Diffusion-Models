@@ -37,6 +37,7 @@ mnist.targets = mnist.targets[idx]
 n_samples = 1000
 selected_idx = torch.randperm(len(mnist.data))[:n_samples]
 X = mnist.data[selected_idx].float() / 255.0
+labels = mnist.targets[selected_idx]  # Store labels for coloring
 X = X.reshape(n_samples, -1)
 
 # Project to 2D using PCA
@@ -92,15 +93,15 @@ for t in tqdm(timesteps):
 # Plot entropy and excess entropy with log scale x-axis
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
-ax1.semilogx(timesteps, entropies, label='Total entropy s(t)')
-ax1.semilogx(timesteps, [compute_gaussian_entropy(t) for t in timesteps], '--', label='Gaussian entropy')
+ax1.semilogx(timesteps, entropies, 'k-', label='Total entropy s(t)', linewidth=2)
+ax1.semilogx(timesteps, [compute_gaussian_entropy(t) for t in timesteps], 'k--', label='Gaussian entropy', linewidth=2)
 ax1.set_xlabel('Time t (log scale)')
 ax1.set_ylabel('Entropy')
 ax1.set_title('Total and Gaussian entropy over time')
 ax1.grid(True)
 ax1.legend()
 
-ax2.semilogx(timesteps, excess_entropies)
+ax2.semilogx(timesteps, excess_entropies, 'k-', linewidth=2)
 ax2.set_xlabel('Time t (log scale)')
 ax2.set_ylabel('Excess entropy f(t)')
 ax2.set_title('Excess entropy over time')
@@ -113,13 +114,13 @@ plt.close()
 # Setup the diffusion animation figure
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
 
-# Initialize scatter plot
-scatter = ax1.scatter([], [], alpha=0.5)
+# Initialize scatter plot with colors for different classes
+scatter = ax1.scatter([], [], c=[], cmap=plt.cm.RdBu, alpha=0.5)
 ax1.set_xlim(X_pca[:, 0].min() - 1, X_pca[:, 0].max() + 1)
 ax1.set_ylim(X_pca[:, 1].min() - 1, X_pca[:, 1].max() + 1)
 
 # Initialize excess entropy plot with log scale x-axis
-line, = ax2.semilogx([], [])
+line, = ax2.semilogx([], [], 'k-', linewidth=2)
 ax2.set_xlim(1e-3, 8)
 ax2.set_ylim(min(excess_entropies), max(excess_entropies))
 ax2.set_xlabel('Time t (log scale)')
@@ -133,6 +134,7 @@ def update(frame):
     noisy_data = X_pca * torch.exp(-t) + noise_scale * torch.randn_like(X_pca)
     
     scatter.set_offsets(noisy_data.numpy())
+    scatter.set_array(labels.numpy())
     ax1.set_title(f't = {t:.3e}')
     
     # Update excess entropy plot
