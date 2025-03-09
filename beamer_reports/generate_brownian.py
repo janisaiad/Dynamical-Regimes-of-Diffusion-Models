@@ -7,7 +7,7 @@ import seaborn as sns
 np.random.seed(42)
 
 # Parameters for initial 2D Gaussian mixture
-means = [np.array([-2, -2]), np.array([2, 2])]  # Centers of the two modes
+means = [np.array([-5, -5]), np.array([5, 5])]  # Centers of the two modes
 covs = [np.array([[0.2, 0], [0, 0.2]]), np.array([[0.2, 0], [0, 0.2]])]  # Covariance matrices
 weights = [0.5, 0.5]  # Equal weights for both modes
 
@@ -50,7 +50,7 @@ for mean in means:
         # Generate Brownian motion
         for i in range(1, n_steps):
             dW = np.random.normal(0, np.sqrt(dt)/5, size=2)  # Scaled down Brownian increments
-            traj[i] = traj[i-1] + dW
+            traj[i] = traj[i-1] + 3*dW # 3*dW for more visible motion
             
         trajectories.append(traj)
 
