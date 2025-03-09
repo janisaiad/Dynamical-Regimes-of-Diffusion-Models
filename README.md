@@ -11,7 +11,10 @@ uv add torch torchvision torchaudio --index-url https://download.pytorch.org/whl
 
 
 
+# Todo
 
+CIFAR2 IMAGES separation viz
+accuracy in fucntion of time, spectral clustering with kernel & non kernel with that 
 
 
 ## Getting started
