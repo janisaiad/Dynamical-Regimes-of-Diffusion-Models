@@ -13,6 +13,7 @@ Requires-Dist: numpy>=2.0.2
 Requires-Dist: pytest>=8.3.4
 Requires-Dist: scikit-learn>=1.6.1
 Requires-Dist: scipy>=1.13.1
+Requires-Dist: seaborn>=0.13.2
 Requires-Dist: torch>=2.5.1
 Requires-Dist: torchvision>=0.21.0
 Requires-Dist: tqdm>=4.67.1
@@ -30,7 +31,10 @@ uv add torch torchvision torchaudio --index-url https://download.pytorch.org/whl
 
 
 
+# Todo
 
+CIFAR2 IMAGES separation viz
+accuracy in fucntion of time, spectral clustering with kernel & non kernel with that 
 
 
 ## Getting started
