@@ -7,7 +7,7 @@ import seaborn as sns
 np.random.seed(42)
 
 # Parameters for initial 2D Gaussian mixture
-means = [np.array([-1, -1]), np.array([1, 1])]  # Centers of the two modes
+means = [np.array([-2, -2]), np.array([2, 2])]  # Centers of the two modes
 covs = [np.array([[0.2, 0], [0, 0.2]]), np.array([[0.2, 0], [0, 0.2]])]  # Covariance matrices
 weights = [0.5, 0.5]  # Equal weights for both modes
 
