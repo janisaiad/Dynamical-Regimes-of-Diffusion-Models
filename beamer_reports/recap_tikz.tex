@@ -1,0 +1,31 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\begin{document}
+\begin{tikzpicture}[node distance=2cm, auto]
+
+  % Ligne supérieure : Chronologie et opérateurs
+  \node (zero) {0};
+  \node (T) [right=of zero] {T};
+  \node (S) [right=of T] {S};
+  \node (C) [right=of S] {C};
+  
+  % Flèches entre les noeuds avec étiquettes "t"
+  \draw[->] (zero) -- node[midway, above] {$t$} (T);
+  \draw[->] (T) -- node[midway, above] {$t$} (S);
+  \draw[->] (S) -- node[midway, above] {$t$} (C);
+  
+  % Indications de phase (I, II, III) placées sous les segments
+  \node[below=0.5cm of $(zero)!0.5!(T)$] {I};
+  \node[below=0.5cm of $(T)!0.5!(S)$] {II};
+  \node[below=0.5cm of $(S)!0.5!(C)$] {III};
+  
+  % Ligne inférieure : Distributions initiale et finale
+  \node (P0) [below=3cm of zero] {$P_0(\tilde{x})$};
+  \node (PT) [below=3cm of C] {$P_T(\tilde{x})$};
+  
+  % Flèche indiquant la transition globale de la distribution
+  \draw[->, dashed] (P0) -- node[midway, below] {Transition} (PT);
+  
+\end{tikzpicture}
+\end{document}
