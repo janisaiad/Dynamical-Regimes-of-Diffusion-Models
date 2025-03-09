@@ -14,7 +14,7 @@
 \usepackage{physics}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-
+\usepackage{graphicx}
 % Color definitions
 \definecolor{myblue}{RGB}{0,114,178}
 \definecolor{myred}{RGB}{213,94,0}
@@ -56,11 +56,12 @@
 
 %% 30 s
 \begin{frame}{Example}
+       
     \begin{center}
         \fbox{\parbox{0.8\textwidth}{
             \centering
             \vspace{2cm}
-            \includegraphics[width=0.7\textwidth]{cars diffusion.gif}
+            [Image: car diffusion animation ]
             \vspace{2cm}
         }}
     \end{center}
@@ -69,55 +70,45 @@
 %% 1 minute
 \begin{frame}{Diffusion Models: Mathematical Foundations}
     \begin{itemize}
+        \item Dataset of images $x_i \in \mathbb{R}^d$ with d large (e.g. 784 for MNIST)
+         \begin{equation}
+            d \gg 1 \text{ (typically } 10^3-10^4\text{)}
+        \end{equation}
         \item Stochastic Differential Equation (SDE):
         \begin{equation}
             dx_t = -\frac{1}{2} x_t dt + \sqrt{2} dW_t
         \end{equation}
         
-        \item Two key probability distributions:
+        
+        \item Two intial and forwarded probability distributions:
         \begin{itemize}
-            \item Empirical distribution (data): $p_t^e(x)$
-            \item Underlying distribution (manifold): $p_t(x)$
+            \item Empirical distribution with $n$ samples (data): $p_0^e(x) = \frac{1}{n} \sum_{i=1}^n \delta(x-x_i)$ and $p_t^e(x) = \frac{1}{n} \sum_{i=1}^n \delta(x-x_i(t))$
+            \item Underlying distribution to learn (manifold): $p_0(x) = \frac{1}{Z_0} e^{-\frac{x^2}{2\sigma_0^2}}$ and $p_t(x) = \frac{1}{Z_t} e^{-\frac{x^2}{2\sigma_t^2}}$
         \end{itemize}
         
-        \item Gaussian convolution transformation:
-        \begin{equation}
-            p_t(x) = \int dy \; p_0(y) \frac{e^{-(x-ye^{-t})^2/(2\sigma_t^2)}}{(2\pi\sigma_t^2)^{d/2}}
-        \end{equation}
-        where $\sigma_t^2 = 1-e^{-2t}$
     \end{itemize}
 \end{frame}
 
 %% 1 minute
 \begin{frame}{Motivation}
     \begin{itemize}
+        
+        \item Gaussian convolution transformation:
+        \begin{equation}
+            p_t(x) = \int dy \; p_0(y) \frac{e^{-(x-ye^{-t})^2/(2\sigma_t^2)}}{(2\pi\sigma_t^2)^{d/2}}
+        \end{equation}
+        where $\sigma_t^2 = 1-e^{-2t}$
+
+        \item Exact score learned hypothesis:
+        \begin{equation}
+            \nabla \log p_t(x) \approx \hat{\nabla} \log p_t^e(x)
+        \end{equation}
+
         \item Key questions :
         \begin{itemize}
-            \item Trends of process' distribution
-            \item Regimes and behavior for long times
+            \item Trends of $p_t(x)$ and $p_t^e(x)$ with t and d
             \item How to determine optimal beginning/stopping times?
         \end{itemize}
-    \end{itemize}
-\end{frame}
-
-
-%% 30 s
-\begin{frame}{Hypothesis Foundations}
-    \begin{itemize}
-        \item Diffusion equation:
-        \begin{equation}
-            dx_t = -\frac{1}{2} x_t dt + \sqrt{2} dW_t
-        \end{equation}
-        
-        \item Exact score hypothesis:
-        \begin{equation}
-            \nabla \log p_t(x) \approx \hat{\nabla} \log p_t(x)
-        \end{equation}
-        
-        \item High dimensional space:
-        \begin{equation}
-            d \gg 1 \text{ (typically } 10^3-10^4\text{)}
-        \end{equation}
     \end{itemize}
 \end{frame}
 
@@ -125,15 +116,34 @@
 
 %% 30 s
 \begin{frame}{Goal}
-
-    
     \begin{itemize}
-        \item n (say 100) images from a huge dataset
         \item Two main critical times:
         \begin{itemize}
             \item $t_s$: Critical time for class separation (gender, lighting ...)
+            \item 2 proofs, 1 with use of score along eigenvectors, 1 with use of covariance and linear separability
+        \end{itemize}
+        
+        \begin{center}
+            \fbox{\parbox{0.8\textwidth}{
+                \centering
+                \vspace{2cm}
+                [Image: t_c animation with real images]
+                \vspace{2cm}
+            }}
+        \end{center}
+        
+        \begin{itemize}
             \item $t_c$: Critical time for image selection
         \end{itemize}
+           
+        \begin{center}
+            \fbox{\parbox{0.8\textwidth}{
+                \centering
+                \vspace{2cm}
+                [Image: Better viz from the paper in tikz, with true generated data]
+                \vspace{2cm}
+            }}
+        \end{center}
     \end{itemize}
 \end{frame}
 
@@ -152,14 +162,27 @@
 %% 2 minute
 \begin{frame}{Critical Separation Time ($t_s$)}
     \begin{itemize}
-        \item Covariance C $\approx$ Cov(samples) = clusters infos
-        \item Represents when classes begin to appear
+    
+        \item 2 covariance matrices:
+        
+        \item Covariance C $\approx$ Cov(samples) = diag$(\lambda_1, \lambda_2, \lambda_3, \lambda_4, \epsilon, ..., \epsilon)$ with $\lambda_i \gg \epsilon$ = clusters infos
+        
+        \item Represents when linear separability of classes begin to appear (like embedding space)
+        
+        \item forwarding, we have 
+        \begin{equation}
+            Cov(p_t^e(x)) = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
+        \end{equation}
+        
+        \item With data, can be estimated with :
+        \begin{equation}
+            Cov(p_t^e(x)) = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})(x_i - \bar{x})^T
+        \end{equation}
+        
         \item Can be estimated by:
         \begin{equation}
             t_s \approx \frac{1}{2}\log(d)
         \end{equation}
-        \item Simple dependence on dimension only
-        \item Independent of number of samples $n$
     \end{itemize}
     
     \begin{center}
