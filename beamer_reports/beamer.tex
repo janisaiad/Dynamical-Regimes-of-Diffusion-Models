@@ -22,14 +22,27 @@
 
 \title{Dynamic Regimes of Diffusion Models}
 \subtitle{A Volumetric and Temporal Analysis}
-\author{EA Topics in ML}
-\institute{Ecole Polytechnique}
+\author{Janis Aiad \and Thomas Pouponneau \and Aurélien Arnoux}
+\institute{EA Topics in ML \\ Ecole Polytechnique \\ \vspace{0.5cm} \small Based on: Biroli et al., Nature Communications 15.1 (2024)}
 \date{\today}
 
 \begin{document}
 
 \begin{frame}
     \titlepage
+    \vspace{-1cm}
+    \begin{center}
+        \footnotesize
+        \begin{tabular}{p{0.9\textwidth}}
+            \textbf{Reference:} \\
+            @article\{Biroli\_2024, \\
+            \hspace{0.3cm} title=\{Dynamical regimes of diffusion models\}, \\
+            \hspace{0.3cm} journal=\{Nature Communications\}, \\
+            \hspace{0.3cm} author=\{Biroli, Giulio and Bonnaire, Tony and de Bortoli, Valentin and Mézard, Marc\}, \\
+            \hspace{0.3cm} year=\{2024\}, volume=\{15\}, number=\{1\} \\
+            \}
+        \end{tabular}
+    \end{center}
 \end{frame}
 
 \begin{frame}{Outline}
@@ -53,6 +66,27 @@
     \end{center}
 \end{frame}
 
+%% 1 minute
+\begin{frame}{Diffusion Models: Mathematical Foundations}
+    \begin{itemize}
+        \item Stochastic Differential Equation (SDE):
+        \begin{equation}
+            dx_t = -\frac{1}{2} x_t dt + \sqrt{2} dW_t
+        \end{equation}
+        
+        \item Two key probability distributions:
+        \begin{itemize}
+            \item Empirical distribution (data): $p_t^e(x)$
+            \item Underlying distribution (manifold): $p_t(x)$
+        \end{itemize}
+        
+        \item Gaussian convolution transformation:
+        \begin{equation}
+            p_t(x) = \int dy \; p_0(y) \frac{e^{-(x-ye^{-t})^2/(2\sigma_t^2)}}{(2\pi\sigma_t^2)^{d/2}}
+        \end{equation}
+        where $\sigma_t^2 = 1-e^{-2t}$
+    \end{itemize}
+\end{frame}
 
 %% 1 minute
 \begin{frame}{Motivation}
