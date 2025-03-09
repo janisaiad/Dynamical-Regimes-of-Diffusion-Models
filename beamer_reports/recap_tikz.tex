@@ -1,7 +1,8 @@
 \documentclass{standalone}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usetikzlibrary{positioning,3d,decorations.markings,calc}
+\usepackage{graphicx}
+\usetikzlibrary{positioning,3d,decorations.markings,calc,perspective}
 \pgfplotsset{compat=1.18}
 
 \begin{document}
@@ -29,39 +30,69 @@
     \node[above] at (3.5,0,0) {Régime II};
     \node[above] at (1,0,0) {Régime I};
 
+    % Définir les styles pour les images en perspective
+    \tikzset{
+        perspective image/.style={
+            canvas is xy plane at z=#1,
+            transform shape,
+        }
+    }
+
     % Encarts pour les coupes aux extrémités (T=0 et T=8)
     % T=0
-    \draw[dashed] (0,-1.5,0) -- (0,-1.5,2) -- (0,1.5,2) -- (0,1.5,0) -- cycle;
-    \node[rotate=90, anchor=south] at (0,0,2.3) {mixture.png};
+    \begin{scope}[canvas is yz plane at x=0]
+        \draw[dashed] (-1.5,0) rectangle (1.5,2);
+        \node[perspective image=1] at (0,1) {\includegraphics[width=2.7cm,height=1.8cm]{mixture.png}};
+    \end{scope}
     
     % T=8
-    \draw[dashed] (8,-1.5,0) -- (8,-1.5,2) -- (8,1.5,2) -- (8,1.5,0) -- cycle;
-    \node[rotate=90, anchor=south] at (8,0,2.3) {gaussian.png};
+    \begin{scope}[canvas is yz plane at x=8]
+        \draw[dashed] (-1.5,0) rectangle (1.5,2);
+        \node[perspective image=1] at (0,1) {\includegraphics[width=2.7cm,height=1.8cm]{gaussian.png}};
+    \end{scope}
 
     % Encarts pour les coupes (y,z) - maintenant divisés en y+ et y-
     % Régime I - y positif
-    \draw[dashed] (1,0,0) -- (1,0,2) -- (1,1.5,2) -- (1,1.5,0) -- cycle;
-    \node[anchor=south west, font=\tiny] at (1,0.75,2) {$y>0$};
+    \begin{scope}[canvas is yz plane at x=1]
+        \draw[dashed] (0,0) rectangle (1.5,2);
+        \node[anchor=south west, font=\tiny] at (0.75,2) {$y>0$};
+        \node[perspective image=1] at (0.75,1) {\includegraphics[width=1.3cm,height=1.7cm]{regime1_pos.png}};
+    \end{scope}
     
     % Régime I - y négatif
-    \draw[dashed] (1,-1.5,0) -- (1,-1.5,2) -- (1,0,2) -- (1,0,0) -- cycle;
-    \node[anchor=north west, font=\tiny] at (1,-0.75,2) {$y<0$};
+    \begin{scope}[canvas is yz plane at x=1]
+        \draw[dashed] (-1.5,0) rectangle (0,2);
+        \node[anchor=north west, font=\tiny] at (-0.75,2) {$y<0$};
+        \node[perspective image=1] at (-0.75,1) {\includegraphics[width=1.3cm,height=1.7cm]{regime1_neg.png}};
+    \end{scope}
     
     % Régime II - y positif
-    \draw[dashed] (3.5,0,0) -- (3.5,0,2) -- (3.5,1.5,2) -- (3.5,1.5,0) -- cycle;
-    \node[anchor=south west, font=\tiny] at (3.5,0.75,2) {$y>0$};
+    \begin{scope}[canvas is yz plane at x=3.5]
+        \draw[dashed] (0,0) rectangle (1.5,2);
+        \node[anchor=south west, font=\tiny] at (0.75,2) {$y>0$};
+        \node[perspective image=1] at (0.75,1) {\includegraphics[width=1.3cm,height=1.7cm]{regime2_pos.png}};
+    \end{scope}
     
     % Régime II - y négatif
-    \draw[dashed] (3.5,-1.5,0) -- (3.5,-1.5,2) -- (3.5,0,2) -- (3.5,0,0) -- cycle;
-    \node[anchor=north west, font=\tiny] at (3.5,-0.75,2) {$y<0$};
+    \begin{scope}[canvas is yz plane at x=3.5]
+        \draw[dashed] (-1.5,0) rectangle (0,2);
+        \node[anchor=north west, font=\tiny] at (-0.75,2) {$y<0$};
+        \node[perspective image=1] at (-0.75,1) {\includegraphics[width=1.3cm,height=1.7cm]{regime2_neg.png}};
+    \end{scope}
     
     % Régime III - y positif
-    \draw[dashed] (7,0,0) -- (7,0,2) -- (7,1.5,2) -- (7,1.5,0) -- cycle;
-    \node[anchor=south west, font=\tiny] at (7,0.75,2) {$y>0$};
+    \begin{scope}[canvas is yz plane at x=7]
+        \draw[dashed] (0,0) rectangle (1.5,2);
+        \node[anchor=south west, font=\tiny] at (0.75,2) {$y>0$};
+        \node[perspective image=1] at (0.75,1) {\includegraphics[width=1.3cm,height=1.7cm]{regime3_pos.png}};
+    \end{scope}
     
     % Régime III - y négatif
-    \draw[dashed] (7,-1.5,0) -- (7,-1.5,2) -- (7,0,2) -- (7,0,0) -- cycle;
-    \node[anchor=north west, font=\tiny] at (7,-0.75,2) {$y<0$};
+    \begin{scope}[canvas is yz plane at x=7]
+        \draw[dashed] (-1.5,0) rectangle (0,2);
+        \node[anchor=north west, font=\tiny] at (-0.75,2) {$y<0$};
+        \node[perspective image=1] at (-0.75,1) {\includegraphics[width=1.3cm,height=1.7cm]{regime3_neg.png}};
+    \end{scope}
 
     % Trajectoire 1 (rouge)
     \draw[red,opacity=0.4] plot coordinates {
@@ -182,10 +213,10 @@
     % Légende pour expliquer les sections
     \node[anchor=south east, align=left, font=\scriptsize] at (11,2,2) {
         \textbf{Temps critiques:}\\
-        $T=0$: Distribution initiale (mixture.png)\\
+        $T=0$: Distribution initiale (mélange)\\
         $t_c$: Temps critique de collapse\\
         $t_s$: Temps critique de séparation\\
-        $T=8$: Distribution finale (gaussian.png)
+        $T=8$: Distribution finale (gaussienne)
     };
 
 \end{tikzpicture}
