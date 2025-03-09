@@ -7,13 +7,13 @@ import seaborn as sns
 np.random.seed(42)
 
 # Parameters for initial 2D Gaussian mixture
-means = [np.array([-2, -2]), np.array([2, 2])]  # Centers of the two modes
-covs = [np.array([[1, 0], [0, 1]]), np.array([[1, 0], [0, 1]])]  # Covariance matrices
+means = [np.array([-1, -1]), np.array([1, 1])]  # Centers of the two modes
+covs = [np.array([[0.2, 0], [0, 0.2]]), np.array([[0.2, 0], [0, 0.2]])]  # Covariance matrices
 weights = [0.5, 0.5]  # Equal weights for both modes
 
 # Generate grid for visualization
-x = np.linspace(-6, 6, 100)
-y = np.linspace(-6, 6, 100)
+x = np.linspace(-1.2, 1.2, 100)
+y = np.linspace(-1.2, 1.2, 100)
 X, Y = np.meshgrid(x, y)
 pos = np.dstack((X, Y))
 
@@ -49,7 +49,7 @@ for mean in means:
         
         # Generate Brownian motion
         for i in range(1, n_steps):
-            dW = np.random.normal(0, np.sqrt(dt), size=2)
+            dW = np.random.normal(0, np.sqrt(dt)/5, size=2)  # Scaled down Brownian increments
             traj[i] = traj[i-1] + dW
             
         trajectories.append(traj)
