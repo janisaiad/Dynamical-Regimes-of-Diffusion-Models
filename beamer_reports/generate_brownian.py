@@ -12,8 +12,8 @@ covs = [np.array([[0.2, 0], [0, 0.2]]), np.array([[0.2, 0], [0, 0.2]])]  # Covar
 weights = [0.5, 0.5]  # Equal weights for both modes
 
 # Generate grid for visualization
-x = np.linspace(-1.2, 1.2, 100)
-y = np.linspace(-1.2, 1.2, 100)
+x = np.linspace(-8, 8, 100)
+y = np.linspace(-8, 8, 100)
 X, Y = np.meshgrid(x, y)
 pos = np.dstack((X, Y))
 

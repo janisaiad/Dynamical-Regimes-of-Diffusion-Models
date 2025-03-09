@@ -17,6 +17,7 @@
     \draw (8,0,0.1) -- (8,0,-0.1) node[below] {$T=8$};
     \draw (5,0,0.1) -- (5,0,-0.1) node[below] {$t_s$};
     \draw (2,0,0.1) -- (2,0,-0.1) node[below] {$t_c$};
+    \draw (0,0,0.1) -- (0,0,-0.1) node[below] {$T=0$};
     
     % Zones de régimes colorées
     \fill[blue!20,opacity=0.3] (8,-2,0) -- (8,2,0) -- (5,2,0) -- (5,-2,0) -- cycle; % Régime III
@@ -28,10 +29,39 @@
     \node[above] at (3.5,0,0) {Régime II};
     \node[above] at (1,0,0) {Régime I};
 
-    % Encarts pour les coupes (y,z) - maintenant perpendiculaires à l'axe du temps
-    \draw[dashed] (1,-1.5,0) -- (1,-1.5,2) -- (1,1.5,2) -- (1,1.5,0) -- cycle; % Encart Régime I
-    \draw[dashed] (3.5,-1.5,0) -- (3.5,-1.5,2) -- (3.5,1.5,2) -- (3.5,1.5,0) -- cycle; % Encart Régime II
-    \draw[dashed] (7,-1.5,0) -- (7,-1.5,2) -- (7,1.5,2) -- (7,1.5,0) -- cycle; % Encart Régime III
+    % Encarts pour les coupes aux extrémités (T=0 et T=8)
+    % T=0
+    \draw[dashed] (0,-1.5,0) -- (0,-1.5,2) -- (0,1.5,2) -- (0,1.5,0) -- cycle;
+    \node[rotate=90, anchor=south] at (0,0,2.3) {mixture.png};
+    
+    % T=8
+    \draw[dashed] (8,-1.5,0) -- (8,-1.5,2) -- (8,1.5,2) -- (8,1.5,0) -- cycle;
+    \node[rotate=90, anchor=south] at (8,0,2.3) {gaussian.png};
+
+    % Encarts pour les coupes (y,z) - maintenant divisés en y+ et y-
+    % Régime I - y positif
+    \draw[dashed] (1,0,0) -- (1,0,2) -- (1,1.5,2) -- (1,1.5,0) -- cycle;
+    \node[anchor=south west, font=\tiny] at (1,0.75,2) {$y>0$};
+    
+    % Régime I - y négatif
+    \draw[dashed] (1,-1.5,0) -- (1,-1.5,2) -- (1,0,2) -- (1,0,0) -- cycle;
+    \node[anchor=north west, font=\tiny] at (1,-0.75,2) {$y<0$};
+    
+    % Régime II - y positif
+    \draw[dashed] (3.5,0,0) -- (3.5,0,2) -- (3.5,1.5,2) -- (3.5,1.5,0) -- cycle;
+    \node[anchor=south west, font=\tiny] at (3.5,0.75,2) {$y>0$};
+    
+    % Régime II - y négatif
+    \draw[dashed] (3.5,-1.5,0) -- (3.5,-1.5,2) -- (3.5,0,2) -- (3.5,0,0) -- cycle;
+    \node[anchor=north west, font=\tiny] at (3.5,-0.75,2) {$y<0$};
+    
+    % Régime III - y positif
+    \draw[dashed] (7,0,0) -- (7,0,2) -- (7,1.5,2) -- (7,1.5,0) -- cycle;
+    \node[anchor=south west, font=\tiny] at (7,0.75,2) {$y>0$};
+    
+    % Régime III - y négatif
+    \draw[dashed] (7,-1.5,0) -- (7,-1.5,2) -- (7,0,2) -- (7,0,0) -- cycle;
+    \node[anchor=north west, font=\tiny] at (7,-0.75,2) {$y<0$};
 
     % Trajectoire 1 (rouge)
     \draw[red,opacity=0.4] plot coordinates {
@@ -147,6 +177,15 @@
         (7.04,1.224,2.089) (7.12,1.220,2.124) (7.20,1.230,2.048) (7.28,1.251,2.083)
         (7.36,1.283,2.144) (7.44,1.330,2.170) (7.52,1.326,2.076) (7.60,1.350,2.088)
         (7.68,1.366,2.016) (7.76,1.305,2.075) (7.84,1.302,2.114) (7.92,1.304,2.115)
+    };
+
+    % Légende pour expliquer les sections
+    \node[anchor=south east, align=left, font=\scriptsize] at (11,2,2) {
+        \textbf{Temps critiques:}\\
+        $T=0$: Distribution initiale (mixture.png)\\
+        $t_c$: Temps critique de collapse\\
+        $t_s$: Temps critique de séparation\\
+        $T=8$: Distribution finale (gaussian.png)
     };
 
 \end{tikzpicture}
